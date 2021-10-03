@@ -4,16 +4,16 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const {Users} = require('../models');
 
-const userRouter = express.Router();
+const usersRouter = express.Router();
 const jsonParser = bodyParser.json();
 
 //to access with jwtauth, you need to pass a users jwt token with the header Authorization + value of Bearer {jwttoken}
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-userRouter.use(jsonParser);
+usersRouter.use(jsonParser);
 
 // Post to register a new user
-userRouter.post('/', jwtAuth, (req, res) => {
+usersRouter.post('/', jwtAuth, (req, res) => {
   const requiredFields = ['username', 'password', 'first_name'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -104,7 +104,7 @@ userRouter.post('/', jwtAuth, (req, res) => {
 })
 
 //put to update a user ie. change password/ permissions
-userRouter.put('/:username', jwtAuth, (req,res)=>{
+usersRouter.put('/:username', jwtAuth, (req,res)=>{
   let username = req.params.username;
   if(!(username && username.length > 6)){
     res.status(400).send('Please Enter a Valid username');
@@ -149,7 +149,7 @@ userRouter.put('/:username', jwtAuth, (req,res)=>{
       .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
 });
 
-userRouter.delete('/:username',  jwtAuth, (req,res)=>{
+usersRouter.delete('/:username',  jwtAuth, (req,res)=>{
   let username = req.params.username 
   if(!(username && username.length>6)){
     res.status(400).send('Please Enter a Valid username');
@@ -176,11 +176,11 @@ userRouter.delete('/:username',  jwtAuth, (req,res)=>{
       })
 });
 
-userRouter.get('/', jwtAuth, (req, res) => {
+usersRouter.get('/', jwtAuth, (req, res) => {
   return Users.find()
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
 
-module.exports = {userRouter};
+module.exports = {usersRouter};

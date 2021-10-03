@@ -4,7 +4,7 @@ let password;
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	window.location = '../launch-game/index.html'
+	window.location = '../../app/index.html'
 }
 
 function signIn(data){
