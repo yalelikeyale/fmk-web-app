@@ -1,5 +1,5 @@
 'use strict';
 const {signinRouter} = require('./signinRouter');
-const {userRouter} = require('./usersRouter');
+const {usersRouter} = require('./usersRouter');
 
-module.exports = {signinRouter, userRouter};
+module.exports = {signinRouter, usersRouter};
