@@ -15,24 +15,14 @@ const createAuthToken = function(user) {
 };
 
 const localAuth = passport.authenticate('local', {session: false});
+
 signinRouter.use(bodyParser.json());
 
-
-const jwtAuth = passport.authenticate('jwt', {session: false});
-
-
-// The user provides a company_name and password to login
+// The user provides a username and password to login
 signinRouter.post('/', localAuth, (req, res) => {
-  console.log('made it into sign in request')
   const authToken = createAuthToken(req.user._id);
   const updated = {"token":authToken}
   res.status(201).json(updated)
 })
-
-// The user exchanges a valid JWT for a new one with a later expiration
-signinRouter.post('/refresh', jwtAuth, (req, res) => {
-  const authToken = createAuthToken(req.user);
-  res.json({authToken});
-});
 
 module.exports = {signinRouter};
