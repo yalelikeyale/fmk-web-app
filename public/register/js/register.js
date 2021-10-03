@@ -13,7 +13,7 @@ function signIn(data){
 		password
 	}
 	const payload = {
-		url:'{replace_me}/login',
+		url:__dirname + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
@@ -42,7 +42,7 @@ $('#submit').on('click', function(e){
 		password
 	}
 	const payload = {
-		url:'{replace_me}/users',
+		url: __dirname + '/users',
 		headers:{
 			'Content-Type':'application/json'
 		},
