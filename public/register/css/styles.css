@@ -1,0 +1,16 @@
+.center{
+	margin: auto;
+}
+
+.card{
+    width: 500px !important;
+    margin-top: 100px;
+}
+
+.bg-color {
+    background-color: #6c19ed !important;
+}
+
+.register {
+	float: right;
+}
