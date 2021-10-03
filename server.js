@@ -25,8 +25,7 @@ app.get('/', (req, res) => {
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 app.use('/login',        signinRouter);
-app.use('/users',          userRouter);
-app.use('/profiles',      profileRouter);
+app.use('/users',          usersRouter);
 
 let server;
 
