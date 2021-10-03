@@ -1,7 +1,6 @@
 'use strict';
 const express = require('express');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 const {Users} = require('../models');
 
 const usersRouter = express.Router();
@@ -11,7 +10,7 @@ usersRouter.use(jsonParser);
 
 // Post to register a new user
 usersRouter.post('/', (req, res) => {
-  const requiredFields = ['username', 'password', 'first_name'];
+  const requiredFields = ['first_name', 'password', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -22,7 +21,7 @@ usersRouter.post('/', (req, res) => {
     });
   }
 
-  const explicityTrimmedFields = ['username', 'password','first_name'];
+  const explicityTrimmedFields = ['first_name', 'password','email'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
@@ -36,7 +35,7 @@ usersRouter.post('/', (req, res) => {
   }
 
   const sizedFields = {
-    username: {
+    email: {
       min: 6
     },
     password: {
@@ -67,9 +66,9 @@ usersRouter.post('/', (req, res) => {
     });
   }
 
-  let {username, password, first_name} = req.body;
+  let {email, password, first_name} = req.body;
 
-  return Users.find({username})
+  return Users.find({email})
     .count()
     .then(count => {
       if (count > 0) {
@@ -85,7 +84,7 @@ usersRouter.post('/', (req, res) => {
     .then((hash) => {
       return Users.create({
         first_name,
-        username,
+        email,
         password: hash
       });
     })
