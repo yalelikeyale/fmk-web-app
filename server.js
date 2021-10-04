@@ -30,7 +30,7 @@ app.get('game', jwtAuth, (req, res) =>{
   res.sendFile(__dirname + './app/index.html');
 })
 
-app.use('/login',  authRouter);
+app.use('/login',   authRouter);
 app.use('/users',   usersRouter);
 
 let server;
