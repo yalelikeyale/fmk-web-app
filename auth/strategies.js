@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 
 
-const localStrategy = new LocalStrategy((username, password, callback) => {
+const localStrategy = new LocalStrategy({username,password,passReqToCallback: true},(req, res) => {
   let user;
   console.log('in local strategy. username: ' + username)
   Users.findOne({ username })
@@ -33,7 +33,6 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
           message: 'Incorrect username or password'
         });
       }
-      console.log('returning user...')
       return callback(null, user);
     })
     .catch(err => {

@@ -1,13 +1,13 @@
 'use strict';
 const express = require('express');
+const config = require('dotenv').config()
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const config = require('dotenv').config()
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
 
-const authRouter = express.Router();
+const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
   return jwt.sign({user}, JWT_SECRET, {
@@ -17,23 +17,22 @@ const createAuthToken = function(user) {
   });
 };
 
-
-authRouter.use(bodyParser.json());
-// The user provides a username and password to login
 const localAuth = passport.authenticate('local', {session: false});
-authRouter.use(bodyParser.json());
+
+signinRouter.use(bodyParser.json());
 // The user provides a username and password to login
-authRouter.post('/', localAuth, (req, res) => {
-  const authToken = createAuthToken(req.user.serialize());
+signinRouter.post('/', localAuth, (err, _user) => {
+  console.log(_user)
+  const authToken = createAuthToken(_user.serialize());
   res.json({authToken});
 });
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // The user exchanges a valid JWT for a new one with a later expiration
-authRouter.post('/refresh', jwtAuth, (req, res) => {
+signinRouter.post('/refresh', jwtAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
   res.json({authToken});
 });
 
-module.exports = {authRouter};
+module.exports = {signinRouter};
