@@ -1,27 +1,22 @@
-let username;
-let password;
-
 const appDomain = 'https://fierce-garden-85097.herokuapp.com'
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	window.location = '../../game'
+	window.location = appDomain + '/game'
 }
 
 function signIn(data){
-	const creds = {
-		email,
-		password
-	}
+	let {email, password} = data;
+
 	const payload = {
 		url: appDomain + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
 		dataType:'json',
-		data:JSON.stringify(creds),
+		data:JSON.stringify({email, password}),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
