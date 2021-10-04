@@ -6,6 +6,7 @@ const { Users } = require('../models/usersModel');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const localStrategy = new LocalStrategy((email, password, callback) => {
+  console.log('inside local strategy: ' + email)
   let user;
   Users.findOne({ email })
     .then(_user => {

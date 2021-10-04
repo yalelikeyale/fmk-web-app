@@ -8,6 +8,7 @@ const {Users} = require('../models')
 const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
+  console.log('inside auth token')
   return jwt.sign({user}, process.env.JWT_SECRET, {
     subject: user.toString(),
     algorithm: 'HS256'
@@ -20,6 +21,7 @@ signinRouter.use(bodyParser.json());
 
 // The user provides a username and password to login
 signinRouter.post('/', localAuth, (req, res) => {
+  console.log('inside login router')
   const authToken = createAuthToken(req.user._id);
   const updated = {"token":authToken}
   res.status(201).json(updated)
