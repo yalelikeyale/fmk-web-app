@@ -17,8 +17,8 @@ function signIn(data){
 		},
 		dataType:'json',
 		data:JSON.stringify({
-			authUser,
-			authPassword
+			username: authUser,
+			password: authPassword
 		}),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
