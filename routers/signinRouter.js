@@ -21,10 +21,9 @@ const localAuth = passport.authenticate('local', {session: false});
 
 signinRouter.use(bodyParser.json());
 // The user provides a username and password to login
-signinRouter.post('/', localAuth, (req, res) => {
-  console.log('made it through localAuth')
-  console.log(req.user)
-  const authToken = createAuthToken(req.user.serialize());
+signinRouter.post('/', localAuth, (err, _user) => {
+  console.log(_user)
+  const authToken = createAuthToken(_user.serialize());
   res.json({authToken});
 });
 
