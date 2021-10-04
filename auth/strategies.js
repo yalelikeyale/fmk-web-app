@@ -14,7 +14,7 @@ const localStrategy = new LocalStrategy({
   usernameField:'username', 
   passwordField:'password', 
   passReqToCallback: true
-}, (username, password, done) => {
+}, (req, username, password, done) => {
   let user;
   Users.findOne({ username })
     .then(_user => {
