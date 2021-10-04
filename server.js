@@ -35,7 +35,6 @@ app.use('/users',   usersRouter);
 
 let server;
 function runServer(dbURI, port) {
-  console.log('inside runServer: ' + dbURI);
   return new Promise((resolve, reject) => {
     mongoose.connect(dbURI, err => {
       if (err) {
