@@ -6,32 +6,57 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const {corsMiddle} = require('./middleware')
+const session = require('express-session')
 mongoose.Promise = global.Promise;
-
-
-const {localStrategy, jwtStrategy, authRouter} = require('./auth');
-passport.use(localStrategy);
-passport.use(jwtStrategy);
-
-const jwtAuth = passport.authenticate('jwt', {session: false});
+const JWT_SECRET = process.env.JWT_SECRET
 
 const { usersRouter } = require('./users');
+const { Users } = require('./models')
 
 const app = express();
 
-app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
+
+app.use(
+  [
+    morgan('common'), 
+    session({
+      secret:JWT_SECRET, 
+      resave:false, 
+      saveUnitialized:true, 
+      cookie:{maxAge:604800}
+    }), 
+    bodyParser.urlencoded({ extended: false }),
+    bodyParser.json(),
+    passport.initialize(),
+    passport.session(),
+    express.static('public'),
+  ]
+)
+
+passport.use(Users.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('game', jwtAuth, (req, res) =>{
-  res.sendFile(__dirname + './app/index.html');
-})
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + './register/index.html');
+});
 
-app.use('/login',   authRouter);
+app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.sendFile(__dirname + './app/index.html');
+});
+
+app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+	console.log(req.user)
+	res.redirect('/game');
+});
+
 app.use('/users',   usersRouter);
+
 
 let server;
 function runServer(dbURI, port) {

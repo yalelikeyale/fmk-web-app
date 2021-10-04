@@ -1,6 +1,7 @@
 'use strict';
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 mongoose.Promise = global.Promise;
 
@@ -34,6 +35,7 @@ UserSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
+UserSchema.plugin(passportLocalMongoose)
 const Users = mongoose.model('User', UserSchema);
 
 module.exports = {Users};
