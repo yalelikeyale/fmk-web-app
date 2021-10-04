@@ -8,9 +8,9 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const { Users } = require('../models');
 const JWT_SECRET = process.env.JWT_SECRET
 
-const localStrategy = new LocalStrategy((username, password, callback) => {
-  let user;
-  Users.findOne({ username: username })
+const localStrategy = new LocalStrategy((userObj, callback) => {
+  let { username } = userObj;
+  Users.findOne({ username })
     .then(_user => {
       user = _user;
       if (!user) {

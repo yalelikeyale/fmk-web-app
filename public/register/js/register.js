@@ -8,15 +8,13 @@ function storeToken(data){
 }
 
 function signIn(data){
-	console.log(data)
-	let {username, password} = data;
 	const payload = {
 		url: appDomain + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
 		dataType:'json',
-		data:JSON.stringify({username, password}),
+		data:JSON.stringify({data}),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
