@@ -7,6 +7,8 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const session = require('express-session')
+const connectEnsureLogin = require('connect-ensure-login');
+
 mongoose.Promise = global.Promise;
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -35,8 +37,8 @@ app.use(
 
 passport.use(Users.createStrategy());
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(Users.serializeUser());
+passport.deserializeUser(Users.deserializeUser());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');

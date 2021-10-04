@@ -1,5 +1,4 @@
 'use strict';
-const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
@@ -25,14 +24,6 @@ UserSchema.methods.serialize = function() {
     firstName: this.firstName || '',
     lastName: this.lastName || ''
   };
-};
-
-UserSchema.methods.validatePassword = function(password) {
-  return bcrypt.compare(password, this.password);
-};
-
-UserSchema.statics.hashPassword = function(password) {
-  return bcrypt.hash(password, 10);
 };
 
 UserSchema.plugin(passportLocalMongoose)
