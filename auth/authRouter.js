@@ -25,8 +25,13 @@ authRouter.post('/', (req, res, next) => {
     if(err){
       res.status(500).json({code: 500, message: 'Local Auth Error'});
     }
-    const authToken = createAuthToken(user.serialize());
-    res.json({authToken});
+    req.logIn(user, function(err){
+      if(err){
+        res.status(500).json({code: 500, message: 'req.login error'});
+      }
+      const authToken = createAuthToken(user.serialize());
+      res.json({authToken});
+    })
   })
 });
 
