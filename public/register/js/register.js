@@ -28,8 +28,9 @@ function signIn(data){
 $('#submit').on('click', function(e){
 	e.preventDefault()
 	const confirm = $('.js-confirm').val()
-	const first_name = $('.js-first').val()
-	const email = $('.js-email').val()
+	const firstName = $('.js-first').val()
+	const lastName = $('.js-last').val()
+	const username = $('.js-username').val()
 	const password = $('.js-password').val()
 	if(!(confirm===password)){
 		//highlight the password/ confirm in red
@@ -38,8 +39,9 @@ $('#submit').on('click', function(e){
 		alert('please provide an email address or a string that follows the format email@domain')
 	} else {
 		const creds = {
-			first_name,
-			email,
+			firstName,
+			lastName,
+			username,
 			password
 		}
 		const payload = {

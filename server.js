@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const {corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
@@ -19,7 +20,7 @@ const {signinRouter, usersRouter } = require('./routers');
 
 const app = express();
 
-app.use([bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
+app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');

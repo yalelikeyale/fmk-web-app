@@ -3,14 +3,14 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const {Users} = require('../models')
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
-  console.log('inside auth token')
-  return jwt.sign({user}, process.env.JWT_SECRET, {
-    subject: user.toString(),
+  return jwt.sign({user}, config.JWT_SECRET, {
+    subject: user.username,
+    expiresIn: config.JWT_EXPIRY,
     algorithm: 'HS256'
   });
 };
@@ -18,13 +18,18 @@ const createAuthToken = function(user) {
 const localAuth = passport.authenticate('local', {session: false});
 
 signinRouter.use(bodyParser.json());
-
 // The user provides a username and password to login
-signinRouter.post('/', localAuth, (req, res) => {
-  console.log('inside login router')
-  const authToken = createAuthToken(req.user._id);
-  const updated = {"token":authToken}
-  res.status(201).json(updated)
-})
+signinRouter.post('/login', localAuth, (req, res) => {
+  const authToken = createAuthToken(req.user.serialize());
+  res.json({authToken});
+});
 
-module.exports = {signinRouter};
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+// The user exchanges a valid JWT for a new one with a later expiration
+signinRouter.post('/refresh', jwtAuth, (req, res) => {
+  const authToken = createAuthToken(req.user);
+  res.json({authToken});
+});
+
+module.exports = {router};

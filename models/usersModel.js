@@ -1,29 +1,39 @@
 'use strict';
-
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 
-const usersSchema = new mongoose.Schema({
-  email:  {type: String, required: true},
-  password:  {type: String, required: true},
-  first_name: {type: String, required: true}
+mongoose.Promise = global.Promise;
+
+const UserSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  firstName: {type: String, default: ''},
+  lastName: {type: String, default: ''}
 });
 
-usersSchema.methods.serialize = function() {
+UserSchema.methods.serialize = function() {
   return {
-    email: this.email,
-    password: this.password
+    username: this.username || '',
+    firstName: this.firstName || '',
+    lastName: this.lastName || ''
   };
-}
+};
 
-usersSchema.methods.validatePassword = function(password) {
+UserSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
-usersSchema.statics.hashPassword = function(password) {
+UserSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-const Users = mongoose.model('users', usersSchema);
+const User = mongoose.model('User', UserSchema);
 
-module.exports = {Users};
+module.exports = {User};
