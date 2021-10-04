@@ -52,7 +52,7 @@ $('#submit').on('click', function(e){
 			error:function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success:signIn
+			success: res =>{console.log(res)}
 		}
 		$.post(payload)
 	}
