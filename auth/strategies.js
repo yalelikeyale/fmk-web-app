@@ -10,7 +10,8 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 let user;
 
-const localStrategy = new LocalStrategy((username, password, callback) => {
+const localStrategy = new LocalStrategy((userObj, callback) => {
+  let {username, password} = userObj;
   Users.findOne({ username })
     .then(_user => {
       user = _user;

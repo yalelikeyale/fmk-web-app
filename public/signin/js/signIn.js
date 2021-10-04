@@ -1,7 +1,7 @@
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	window.location = '../launch-game/index.html'
+	window.location = '../game'
 }
 
 $('#submit').on('click', function(e){
@@ -12,9 +12,8 @@ $('#submit').on('click', function(e){
 		username,
 		password
 	}
-	console.log(creds)
 	const payload = {
-		url:'{}/login',
+		url:'/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
