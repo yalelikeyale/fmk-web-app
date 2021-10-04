@@ -16,6 +16,7 @@ const localStrategy = new LocalStrategy({
   passReqToCallback: true
 }, (req, username, password, done) => {
   let user;
+  let reqCp = req
   Users.findOne({ username })
     .then(_user => {
       user = _user;
@@ -28,7 +29,7 @@ const localStrategy = new LocalStrategy({
       if (!isValid) {
         return done(null, false, { message: 'Incorrect password.' });
       }
-      req.logIn(user, function(err){
+      reqCp.logIn(user, function(err){
         if(err){return err}
         return done(null, user)
       })
