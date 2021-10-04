@@ -10,13 +10,13 @@ const {corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 
-const {localStrategy, jwtStrategy } = require('./auth');
+const {localStrategy, jwtStrategy, authRouter} = require('./auth');
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-const { signinRouter, usersRouter } = require('./routers');
+const { usersRouter } = require('./users');
 
 const app = express();
 
@@ -26,11 +26,11 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/game', jwtAuth, (req, res) =>{
+app.get('game', jwtAuth, (req, res) =>{
   res.sendFile(__dirname + './app/index.html');
 })
 
-app.use('/login',  signinRouter);
+app.use('/login',  authRouter);
 app.use('/users',   usersRouter);
 
 let server;
