@@ -9,14 +9,14 @@ function storeToken(data){
 
 function signIn(data){
 	console.log(data)
-	let {email, password} = data;
+	let {username, password} = data;
 	const payload = {
 		url: appDomain + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
 		dataType:'json',
-		data:JSON.stringify({email, password}),
+		data:JSON.stringify({username, password}),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
@@ -35,7 +35,7 @@ $('#submit').on('click', function(e){
 	if(!(confirm===password)){
 		//highlight the password/ confirm in red
 		alert('passwords do not match')
-	} else if (!(re.test(email))) {
+	} else if (!(re.test(username))) {
 		alert('please provide an email address or a string that follows the format email@domain')
 	} else {
 		const creds = {

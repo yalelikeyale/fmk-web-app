@@ -10,13 +10,13 @@ const {corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 
-const {localStrategy, jwtStrategy } = require('./authentication');
+const {localStrategy, jwtStrategy } = require('./auth');
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-const {signinRouter, usersRouter } = require('./routers');
+const { signinRouter, usersRouter } = require('./routers');
 
 const app = express();
 
@@ -35,6 +35,7 @@ app.use('/users',   usersRouter);
 
 let server;
 function runServer(dbURI, port) {
+  console.log('inside runServer: ' + dbURI);
   return new Promise((resolve, reject) => {
     mongoose.connect(dbURI, err => {
       if (err) {

@@ -9,9 +9,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
-  return jwt.sign({user}, config.JWT_SECRET, {
+  return jwt.sign({user}, JWT_SECRET, {
     subject: user.username,
-    expiresIn: config.JWT_EXPIRY,
+    // expiresIn: config.JWT_EXPIRY,
     algorithm: 'HS256'
   });
 };
@@ -33,4 +33,4 @@ signinRouter.post('/refresh', jwtAuth, (req, res) => {
   res.json({authToken});
 });
 
-module.exports = {router};
+module.exports = {signinRouter};

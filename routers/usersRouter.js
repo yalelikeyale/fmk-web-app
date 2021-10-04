@@ -2,14 +2,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {User} = require('./models');
+const {Users} = require('../models');
 
-const router = express.Router();
+const usersRouter = express.Router();
 
 const jsonParser = bodyParser.json();
 
 // Post to register a new user
-router.post('/', jsonParser, (req, res) => {
+usersRouter.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -98,7 +98,7 @@ router.post('/', jsonParser, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
 
-  return User.find({username})
+  return Users.find({username})
     .count()
     .then(count => {
       if (count > 0) {
@@ -111,10 +111,10 @@ router.post('/', jsonParser, (req, res) => {
         });
       }
       // If there is no existing user, hash the password
-      return User.hashPassword(password);
+      return Users.hashPassword(password);
     })
     .then(hash => {
-      return User.create({
+      return Users.create({
         username,
         password: hash,
         firstName,
@@ -134,14 +134,4 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-// Never expose all your users like below in a prod application
-// we're just doing this so we have a quick way to see
-// if we're creating users. keep in mind, you can also
-// verify this in the Mongo shell.
-router.get('/', (req, res) => {
-  return User.find()
-    .then(users => res.json(users.map(user => user.serialize())))
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
-});
-
-module.exports = {router};
+module.exports = {usersRouter};
