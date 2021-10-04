@@ -29,8 +29,9 @@ authRouter.post('/', (req, res, next) => {
       if(err){
         res.status(500).json({code: 500, message: 'req.login error'});
       }
-      const authToken = createAuthToken(user.serialize());
-      res.json({authToken});
+      console.log(req.user)
+      const authToken = createAuthToken(req.user.serialize());
+      res.status(201).json({authToken});
     })
   })
 });
