@@ -28,7 +28,7 @@ const localStrategy = new LocalStrategy({
       if (!isValid) {
         return done(null, false, { message: 'Incorrect password.' });
       }
-      req.logIn(user, function(err){
+      req.login(user, function(err){
         if(err){return err}
         return done(null, user)
       })
