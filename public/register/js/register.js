@@ -8,8 +8,8 @@ function storeToken(data){
 }
 
 function signIn(data){
+	console.log(data)
 	let {email, password} = data;
-
 	const payload = {
 		url: appDomain + '/login',
 		headers:{
