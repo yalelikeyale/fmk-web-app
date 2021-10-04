@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const config = require('dotenv').config()
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
