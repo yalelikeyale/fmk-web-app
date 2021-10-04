@@ -17,6 +17,7 @@ const localStrategy = new LocalStrategy({
 }, (req, username, password, done) => {
   let user;
   let reqCp = req
+  console.log(req)
   Users.findOne({ username })
     .then(_user => {
       user = _user;
