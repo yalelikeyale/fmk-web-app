@@ -22,10 +22,7 @@ app.use(
   [
     morgan('common'), 
     session({
-      secret:JWT_SECRET, 
-      resave:false, 
-      saveUnitialized:true, 
-      cookie:{maxAge:604800}
+      secret:JWT_SECRET
     }), 
     bodyParser.urlencoded({ extended: false }),
     bodyParser.json(),

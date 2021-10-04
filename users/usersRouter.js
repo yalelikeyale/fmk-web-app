@@ -103,23 +103,17 @@ usersRouter.post('/', jsonParser, (req, res) => {
           location: 'username'
         });
       }
-      // If there is no existing user, hash the password
-      return Users.hashPassword(password);
-    })
-    .then(hash => {
-      return Users.create({
+      Users.create({
         username,
-        password: hash,
+        password,
         firstName,
         lastName
-      });
-    })
-    .then(user => {
-      return res.status(201).json(user.serialize());
+      })
+      .then(user => {
+        return res.status(201).json(user.serialize());
+      })
     })
     .catch(err => {
-      // Forward validation errors on to the client, otherwise give a 500
-      // error because something unexpected has happened
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
