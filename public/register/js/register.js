@@ -12,7 +12,7 @@ function storeToken(data){
 
 function signIn(data){
 	const creds = {
-		username,
+		email,
 		password
 	}
 	const payload = {
