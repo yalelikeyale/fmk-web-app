@@ -7,6 +7,8 @@ function storeToken(data){
 	window.location = appDomain + '/game'
 }
 
+let authUser;
+let authPassword;
 function signIn(data){
 	const payload = {
 		url: appDomain + '/login',
@@ -14,7 +16,10 @@ function signIn(data){
 			'Content-Type':'application/json'
 		},
 		dataType:'json',
-		data:JSON.stringify({data}),
+		data:JSON.stringify({
+			authUser,
+			authPassword
+		}),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
@@ -52,7 +57,7 @@ $('#submit').on('click', function(e){
 			error:function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success: res =>{console.log(res)}
+			success:signIn 
 		}
 		$.post(payload)
 	}
