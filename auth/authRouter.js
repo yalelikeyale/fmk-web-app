@@ -21,8 +21,7 @@ const createAuthToken = function(user) {
 authRouter.use(bodyParser.json());
 // The user provides a username and password to login
 authRouter.post('/', (req, res, next) => {
-  console.log('in auth router');
-  passport.authenticate('local', {session: false}, function(err, user){
+  passport.authenticate('local', {session: false}, function(err, user, info){
     if(err){
       res.status(500).json({code: 500, message: 'Local Auth Error'});
     }
@@ -30,11 +29,10 @@ authRouter.post('/', (req, res, next) => {
       if(err){
         res.status(500).json({code: 500, message: 'req.login error'});
       }
-      console.log(req.user)
-      const authToken = createAuthToken(req.user.serialize());
+      const authToken = createAuthToken(user.serialize());
       res.status(201).json({authToken});
     })
-  })
+  })(err, user, info)
 });
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
