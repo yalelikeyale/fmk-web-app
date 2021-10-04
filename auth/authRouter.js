@@ -21,6 +21,7 @@ const createAuthToken = function(user) {
 authRouter.use(bodyParser.json());
 // The user provides a username and password to login
 authRouter.post('/', (req, res, next) => {
+  console.log('in auth router');
   passport.authenticate('local', {session: false}, function(err, user){
     if(err){
       res.status(500).json({code: 500, message: 'Local Auth Error'});
