@@ -50,8 +50,7 @@ app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
-	console.log(req.user)
-	res.redirect('/game');
+	res.sendFile('/game/launch.html');
 });
 
 app.use('/users',   usersRouter);

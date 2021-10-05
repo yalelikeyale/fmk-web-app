@@ -1,17 +1,17 @@
-const appDomain = 'https://fierce-garden-85097.herokuapp.com'
+
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	window.location = appDomain + '/game'
+	window.location = __dirname + '/game'
 }
 
 let authUser;
 let authPassword;
 function signIn(data){
 	const payload = {
-		url: appDomain + '/login',
+		url: __dirname + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
@@ -48,7 +48,7 @@ $('#submit').on('click', function(e){
 			password
 		}
 		const payload = {
-			url: appDomain + '/users',
+			url: __dirname + '/users',
 			headers:{
 				'Content-Type':'application/json'
 			},
