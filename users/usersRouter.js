@@ -104,7 +104,8 @@ usersRouter.post('/', jsonParser, (req, res) => {
         username,
         password,
         firstName,
-        lastName
+        lastName, 
+        active:true
       })
       .then(user => {
         return res.status(201).json(user.genHeapIdentity());

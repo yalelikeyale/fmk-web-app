@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema
 
-const Users = new Schema({
+const User = new Schema({
   username: {
     type: String,
     required: true,
@@ -21,14 +21,14 @@ const Users = new Schema({
   active:{type: Boolean}
 });
 
-Users.methods.genHeapIdentity = function() {
+User.methods.genHeapIdentity = function() {
   return {
     heapIdentity: this._id
   };
 };
 
-Users.plugin(passportLocalMongoose)
-const Users = mongoose.model('User', UserSchema);
+User.plugin(passportLocalMongoose)
+const Users = mongoose.model('User', User);
 
 module.exports = mongoose.model('userData', Users, 'userData');
 
