@@ -16,7 +16,7 @@ usersRouter.post('/login', passport.authenticate('local', { failureRedirect: '/'
 	res.redirect('/game');
 });
 
-usersRouter.post('/signin', [passport.authenticate('local',{failureRedirect:'/'}), jsonParser], (req,res)=>{
+usersRouter.post('/signin', jsonParser, (req,res)=>{
   let {username} = req.body
   Users.findOne({username})
     .then(user=>{
