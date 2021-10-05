@@ -13,7 +13,7 @@ mongoose.Promise = global.Promise;
 const JWT_SECRET = process.env.JWT_SECRET
 
 const { usersRouter } = require('./users');
-const { Users } = require('./models')
+const { User } = require('./models')
 
 const app = express();
 
@@ -35,10 +35,10 @@ app.use(
   ]
 )
 
-passport.use(Users.createStrategy());
+passport.use(User.createStrategy());
 
-passport.serializeUser(Users.serializeUser());
-passport.deserializeUser(Users.deserializeUser());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
   console.log(__dirname + '/')

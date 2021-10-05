@@ -4,7 +4,9 @@ const passportLocalMongoose = require('passport-local-mongoose');
 
 mongoose.Promise = global.Promise;
 
-const UserSchema = mongoose.Schema({
+const Schema = mongoose.Schema
+
+const User = new Schema({
   username: {
     type: String,
     required: true,
@@ -18,13 +20,13 @@ const UserSchema = mongoose.Schema({
   lastName: {type: String, default: ''}
 });
 
-UserSchema.methods.genHeapIdentity = function() {
+User.methods.genHeapIdentity = function() {
   return {
     heapIdentity: this._id
   };
 };
 
-UserSchema.plugin(passportLocalMongoose)
-const Users = mongoose.model('User', UserSchema);
+User.plugin(passportLocalMongoose)
+const User = mongoose.model('User', User);
 
-module.exports = {Users};
+module.exports = {User};
