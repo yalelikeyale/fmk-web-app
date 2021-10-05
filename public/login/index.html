@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <title>FMK Login</title>
+        <title>Bootstrap 4 Layout</title>
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- Font Awesome -->
@@ -20,11 +20,20 @@
                     <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="text-center default-text py-3"><i class="fa fa-lock"></i> Sign In:</h3>
-                                <!--Body-->
+                                <h3 class="text-center default-text py-3">Sign Up</h3>
+                                <div class="md-form">
+                                    <i class="fa fa-user prefix grey-text"></i>
+                                    <input type="text" id="defaultForm-first" class="form-control js-first">
+                                    <label for="defaultForm-first">Your First Name</label>
+                                </div>
+                                <div class="md-form">
+                                    <i class="fa fa-user prefix grey-text"></i>
+                                    <input type="text" id="defaultForm-last" class="form-control js-last">
+                                    <label for="defaultForm-first">Your Last Name</label>
+                                </div>
                                 <div class="md-form">
                                     <i class="fa fa-envelope prefix grey-text"></i>
-                                    <input type="text" id="defaultForm-email" class="form-control js-username">
+                                    <input type="text" id="defaultForm-username" class="form-control js-username">
                                     <label for="defaultForm-email">Your email</label>
                                 </div>
                                 <div class="md-form">
@@ -32,12 +41,17 @@
                                     <input type="password" id="defaultForm-pass" class="form-control js-password">
                                     <label for="defaultForm-pass">Your password</label>
                                 </div>
+                                <div class="md-form">
+                                    <i class="fa fa-check-square prefix grey-text" aria-hidden="true"></i>
+                                    <input type="password" id="defaultForm-confirm" class="form-control js-confirm">
+                                    <label for="defaultForm-pass">Confirm password</label>
+                                </div>
                                 <div class="text-center">
-                                    <button class="btn btn-default waves-effect waves-light bg-color" id="submit">Log In</button>
+                                    <button class="btn btn-default waves-effect waves-light bg-color" id="submit">Submit</button>
                                 </div>
                                 <hr>
                                 <div class="reg-wrap">
-                                    <span class="register">Need a Log In?<a href="../register/index.html"> Register</a></span>
+                                    <span class="register">Already have a log in?<a href="../signin/index.html"> Sign In</a></span>
                                 </div>
                             </div>
                         </div>
@@ -53,6 +67,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
-    <script src="js/signIn.js"></script>
+    <script src="js/register.js"></script>
     </body>
 </html>

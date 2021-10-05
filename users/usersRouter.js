@@ -2,9 +2,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {User} = require('../models');
+const {Users} = require('../models');
 const usersRouter = express.Router();
 const jsonParser = bodyParser.json();
+
 
 // Post to register a new user
 usersRouter.post('/', jsonParser, (req, res) => {
@@ -89,7 +90,7 @@ usersRouter.post('/', jsonParser, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
 
-  return User.find({username})
+  return Users.find({username})
     .count()
     .then(count => {
       if (count > 0) {
@@ -101,7 +102,7 @@ usersRouter.post('/', jsonParser, (req, res) => {
           location: 'username'
         });
       }
-      User.create({
+      Users.register({
         username,
         password,
         firstName,
