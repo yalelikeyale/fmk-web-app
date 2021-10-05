@@ -38,7 +38,7 @@ passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + './index.html');
 });
 
 app.get('/login', (req, res) => {
@@ -46,11 +46,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + './app/index.html');
+  res.sendFile(__dirname + './game/launch.html');
 });
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
-	res.sendFile('/game/launch.html');
+	res.redirect('/game')
 });
 
 app.use('/users',   usersRouter);
