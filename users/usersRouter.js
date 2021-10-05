@@ -11,7 +11,12 @@ passport.use(Users.createStrategy());
 passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
-usersRouter.post('/signin', [passport.authenticate('local'), jsonParser], (req,res)=>{
+usersRouter.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+	console.log(req.user)
+	res.redirect('/game');
+});
+
+usersRouter.post('/signin', [passport.authenticate('local',{failureRedirect:'/'}), jsonParser], (req,res)=>{
   let {username} = req.body
   Users.findOne({username})
     .then(user=>{
