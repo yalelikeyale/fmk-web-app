@@ -98,15 +98,18 @@ usersRouter.post('/', jsonParser, (req, res) => {
           location: 'username'
         });
       }
-      User = new Users({username, firstName, lastName, active})
-      Users.register(User, password)
-      .then(user => {
-        return res.status(201).json(user.genHeapIdentity());
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(500).json({code: 500, message: 'Failed to Register User'});
-      })
+      // User = new Users({username, firstName, lastName, active})
+      Users.register({username, firstName, lastName, active:true}, password)
+        .then(user=>{
+          if(!user){
+            return res.status(500).json({code: 500, message: 'No new user passed to callback'});
+          }
+          return res.status(201).json(user.genHeapIdentity());
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json({code: 500, message: 'Failed to Register New User'});
+        })
     })
     .catch(err => {
       if (err.reason === 'ValidationError') {
