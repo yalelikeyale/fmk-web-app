@@ -1,10 +1,4 @@
-function storeHeapIdentity(data){
-	console.log('in store token')
-	console.log(data.heapIdentity)
-	localStorage.setItem('heapIdentity',data.heapIdentity)
-	//redirect
-	window.location = '/game'
-}
+
 
 $('#submit').on('click', function(e){
 	e.preventDefault()
@@ -23,8 +17,7 @@ $('#submit').on('click', function(e){
 		data:JSON.stringify(creds),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
-		},
-		success:storeHeapIdentity
+		}
 	}
 	$.post(payload)
 })
