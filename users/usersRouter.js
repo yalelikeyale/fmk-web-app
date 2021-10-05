@@ -81,10 +81,8 @@ usersRouter.post('/', jsonParser, (req, res) => {
       location: tooSmallField || tooLargeField
     });
   }
-
+  console.log(req.body)
   let {username, password, firstName = '', lastName = ''} = req.body;
-  // Username and password come in pre-trimmed, otherwise we throw an error
-  // before this
   firstName = firstName.trim();
   lastName = lastName.trim();
 
@@ -100,13 +98,8 @@ usersRouter.post('/', jsonParser, (req, res) => {
           location: 'username'
         });
       }
-      Users.register({
-        username,
-        password,
-        firstName,
-        lastName, 
-        active:true
-      })
+      User = new Users({username, firstName, lastName, active})
+      Users.register(User, password)
       .then(user => {
         return res.status(201).json(user.genHeapIdentity());
       })
