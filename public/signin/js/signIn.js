@@ -15,7 +15,6 @@ $('#submit').on('click', function(e){
 		password
 	}
 	const payload = {
-		console.log(location.origin + '/login')
 		url:location.origin + '/login',
 		headers:{
 			'Content-Type':'application/json'
