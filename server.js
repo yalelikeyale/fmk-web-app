@@ -50,9 +50,13 @@ app.get('/register', (req, res) => {
   res.sendFile(__dirname + '/register/index.html');
 });
 
-app.get('/signin', (req, res) => {
-  console.log(__dirname + '/')
-  res.sendFile(__dirname + '/signin/index.html');
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/register/index.html');
+});
+
+app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+	console.log(req.user)
+	res.redirect('/game');
 });
 
 app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {

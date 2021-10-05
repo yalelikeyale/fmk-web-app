@@ -1,38 +1,10 @@
 'use strict';
 const express = require('express');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 
 const {Users} = require('../models');
 const usersRouter = express.Router();
 const jsonParser = bodyParser.json();
-
-passport.use(Users.createStrategy());
-passport.serializeUser(Users.serializeUser());
-passport.deserializeUser(Users.deserializeUser());
-
-usersRouter.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
-	console.log(req.user)
-	res.redirect('/game');
-});
-
-usersRouter.post('/signin', jsonParser, (req,res)=>{
-  let {username} = req.body
-  Users.findOne({username})
-    .then(user=>{
-      if(!user){
-        return res.status(422).json({
-          code: 422,
-          reason: 'ValidationError',
-          message: 'User not Found'
-        });
-      }
-      return res.status(201).json(user.genHeapIdentity());
-    })
-    .catch(err=>{
-      res.status(500).json({code: 500, message: 'Internal server error'});
-    })
-})
 
 // Post to register a new user
 usersRouter.post('/', jsonParser, (req, res) => {
