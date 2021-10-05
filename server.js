@@ -54,14 +54,14 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/register/index.html');
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login', successReturnToOrRedirect: '/'}),  function(req, res) {
 	console.log(req.user)
 	res.redirect('/game');
 });
 
-app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  console.log(__dirname + '/game/launch.html')
-  res.sendFile(__dirname + '/game/launch.html');
+app.get('/game', connectEnsureLogin.ensureLoggedIn('/login'), (req, res) => {
+  console.log(__dirname + '/game/index.html')
+  res.sendFile(__dirname + '/game/index.html');
 });
 
 app.use('/users',   usersRouter);
