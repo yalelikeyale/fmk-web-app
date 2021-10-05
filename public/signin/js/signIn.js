@@ -1,7 +1,8 @@
 function storeToken(data){
-	localStorage.setItem('access_key',data.token)
+	console.log('in store token')
+	localStorage.setItem('heapIdentity',data.heapIdentity)
 	//redirect
-	window.location = '../game'
+	window.location = './game'
 }
 
 $('#submit').on('click', function(e){

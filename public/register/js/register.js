@@ -1,14 +1,19 @@
 
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-function storeToken(data){
-	localStorage.setItem('access_key',data.token)
-	//redirect
-	window.location = __dirname + '/game'
-}
+
 
 let authUser;
 let authPassword;
+
+function storeToken(data){
+	console.log('in store token')
+	localStorage.setItem('heapIdentity',data.heapIdentity)
+	//redirect
+	window.location = './game'
+}
+
+
 function signIn(data){
 	const payload = {
 		url: __dirname + '/login',
