@@ -1,5 +1,6 @@
-function storeToken(data){
+function storeHeapIdentity(data){
 	console.log('in store token')
+	console.log(data.heapIdentity)
 	localStorage.setItem('heapIdentity',data.heapIdentity)
 	//redirect
 	window.location = '/game'
@@ -24,7 +25,7 @@ $('#submit').on('click', function(e){
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
-		success:storeToken
+		success:storeHeapIdentity
 	}
 	$.post(payload)
 })

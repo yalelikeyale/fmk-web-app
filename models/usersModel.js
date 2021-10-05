@@ -18,7 +18,7 @@ const UserSchema = mongoose.Schema({
   lastName: {type: String, default: ''}
 });
 
-UserSchema.methods.serialize = function() {
+UserSchema.methods.genHeapIdentity = function() {
   return {
     heapIdentity: this._id
   };

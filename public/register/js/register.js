@@ -6,32 +6,12 @@ const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9
 let authUser;
 let authPassword;
 
-function storeToken(data){
+function storeHeapIdentity(data){
 	console.log('in store token')
+	console.log(data.heapIdentity)
 	localStorage.setItem('heapIdentity',data.heapIdentity)
 	//redirect
 	window.location = '/game'
-}
-
-
-function signIn(data){
-	const payload = {
-		url: location.origin + '/login',
-		headers:{
-			'Content-Type':'application/json'
-		},
-		dataType:'json',
-		data:JSON.stringify({
-			username: authUser,
-			password: authPassword
-		}),
-		error:function(error){
-			console.log('error ' + JSON.stringify(error));
-		},
-		success:storeToken
-	}
-	console.log(payload.url)
-	$.post(payload)
 }
 
 $('#submit').on('click', function(e){
@@ -63,9 +43,8 @@ $('#submit').on('click', function(e){
 			error:function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success:signIn 
+			success:storeHeapIdentity 
 		}
-		console.log(payload.url)
 		$.post(payload)
 	}
 })

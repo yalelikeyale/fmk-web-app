@@ -110,7 +110,7 @@ usersRouter.post('/', jsonParser, (req, res) => {
         lastName
       })
       .then(user => {
-        return res.status(201).json(user.serialize());
+        return res.status(201).json(user.genHeapIdentity());
       })
     })
     .catch(err => {
