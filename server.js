@@ -38,20 +38,19 @@ passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + './index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + './register/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + './game/launch.html');
+  console.log(__dirname + '/launch.html')
+  res.sendFile(__dirname + '/launch.html');
 });
 
-
 app.use('/users',   usersRouter);
-
 
 let server;
 function runServer(dbURI, port) {
