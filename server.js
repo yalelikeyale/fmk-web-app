@@ -17,13 +17,16 @@ const { Users } = require('./models')
 
 const app = express();
 
+app.use(session({
+  secret: 'r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+}));
 
 app.use(
   [
     morgan('common'), 
-    session({
-      secret:JWT_SECRET
-    }), 
     bodyParser.urlencoded({ extended: false }),
     bodyParser.json(),
     passport.initialize(),
@@ -38,16 +41,23 @@ passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
 app.get('/', (req, res) => {
+  console.log(__dirname + '/')
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.get('/register', (req, res) => {
+  console.log(__dirname + '/')
+  res.sendFile(__dirname + '/register/index.html');
+});
+
+app.get('/signin', (req, res) => {
+  console.log(__dirname + '/')
+  res.sendFile(__dirname + '/signin/index.html');
 });
 
 app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  console.log(__dirname + '/launch.html')
-  res.sendFile(__dirname + '/launch.html');
+  console.log(__dirname + '/game/launch.html')
+  res.sendFile(__dirname + '/game/launch.html');
 });
 
 app.use('/users',   usersRouter);

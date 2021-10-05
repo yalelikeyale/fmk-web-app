@@ -1,14 +1,17 @@
 'use strict';
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 const {Users} = require('../models');
-
 const usersRouter = express.Router();
-
 const jsonParser = bodyParser.json();
 
-usersRouter.post('/signin', jsonParser, (req,res)=>{
+passport.use(Users.createStrategy());
+passport.serializeUser(Users.serializeUser());
+passport.deserializeUser(Users.deserializeUser());
+
+usersRouter.post('/signin', [jsonParser, passport.use('local')], (req,res)=>{
   let {username} = req.body
   Users.findOne({username})
     .then(user=>{
