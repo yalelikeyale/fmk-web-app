@@ -2,7 +2,7 @@ function storeToken(data){
 	console.log('in store token')
 	localStorage.setItem('heapIdentity',data.heapIdentity)
 	//redirect
-	window.location = './game'
+	window.location = '/game'
 }
 
 $('#submit').on('click', function(e){
@@ -14,6 +14,7 @@ $('#submit').on('click', function(e){
 		password
 	}
 	const payload = {
+		console.log(location.origin + '/login')
 		url:location.origin + '/login',
 		headers:{
 			'Content-Type':'application/json'
