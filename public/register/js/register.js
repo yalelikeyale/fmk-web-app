@@ -16,7 +16,7 @@ function storeToken(data){
 
 function signIn(data){
 	const payload = {
-		url: __dirname + '/login',
+		url: location.origin + '/login',
 		headers:{
 			'Content-Type':'application/json'
 		},
@@ -54,7 +54,7 @@ $('#submit').on('click', function(e){
 			password
 		}
 		const payload = {
-			url: __dirname + '/users',
+			url: location.origin + '/users',
 			headers:{
 				'Content-Type':'application/json'
 			},
