@@ -8,6 +8,24 @@ const usersRouter = express.Router();
 
 const jsonParser = bodyParser.json();
 
+usersRouter.post('/signin', jsonParser, (req,res)=>{
+  let {username} = req.body
+  Users.findOne({username})
+    .then(user=>{
+      if(!user){
+        return res.status(422).json({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'User not Found'
+        });
+      }
+      return res.status(201).json(user.genHeapIdentity());
+    })
+    .catch(err=>{
+      res.status(500).json({code: 500, message: 'Internal server error'});
+    })
+})
+
 // Post to register a new user
 usersRouter.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password'];
