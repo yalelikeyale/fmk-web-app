@@ -11,7 +11,7 @@ passport.use(Users.createStrategy());
 passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
-usersRouter.post('/signin', [passport.use('local'), jsonParser], (req,res)=>{
+usersRouter.post('/signin', [passport.authenticate('local'), jsonParser], (req,res)=>{
   let {username} = req.body
   Users.findOne({username})
     .then(user=>{
