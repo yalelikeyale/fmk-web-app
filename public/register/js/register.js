@@ -25,6 +25,7 @@ function signIn(data){
 		},
 		success:storeToken
 	}
+	console.log(payload.url)
 	$.post(payload)
 }
 
@@ -59,6 +60,7 @@ $('#submit').on('click', function(e){
 			},
 			success:signIn 
 		}
+		console.log(payload.url)
 		$.post(payload)
 	}
 })
