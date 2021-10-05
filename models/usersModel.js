@@ -30,5 +30,5 @@ User.methods.genHeapIdentity = function() {
 User.plugin(passportLocalMongoose)
 const Users = mongoose.model('User', User);
 
-module.exports = mongoose.model('userData', Users, 'userData');
+module.exports = {Users}
 
