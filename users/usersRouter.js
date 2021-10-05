@@ -111,6 +111,10 @@ usersRouter.post('/', jsonParser, (req, res) => {
       .then(user => {
         return res.status(201).json(user.genHeapIdentity());
       })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({code: 500, message: 'Failed to Register User'});
+      })
     })
     .catch(err => {
       if (err.reason === 'ValidationError') {
