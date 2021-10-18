@@ -1,7 +1,9 @@
 const config = require('dotenv').config()
 const DB_PORT = process.env.PORT || 8080;
 const DB_URL = encodeURI(process.env.DB_URL);
+const API_KEY = process.env.API_KEY
 const express = require('express');
+const aws = require('aws-sdk');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -12,13 +14,13 @@ const connectEnsureLogin = require('connect-ensure-login');
 mongoose.Promise = global.Promise;
 const JWT_SECRET = process.env.JWT_SECRET
 
-const { usersRouter } = require('./users');
-const { Users } = require('./models')
+const { usersRouter, imagesRouter } = require('./routers');
+const { Users, Images } = require('./models')
 
 const app = express();
 
 app.use(session({
-  secret: 'r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#',
+  secret: API_KEY,
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60 * 60 * 1000 } // 1 hour

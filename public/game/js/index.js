@@ -1,101 +1,6 @@
 'use strict'
 
 $(document).ready(function(){
-	const state = {
-		'round':0,
-//this would be replaced by a database and image files stored in S3
-		'images':{
-			'burrito':{
-				'pic':'images/burrito.jpeg',
-				'alt':'A Burrito',
-				'answer':
-				'marry'
-			},
-			'pizza':{
-				'pic':'images/pizza.jpeg',
-				'alt':'A Pizza',
-				'answer':'kill'
-			},
-			'chicken':{
-				'pic':'images/fried_chicken.jpeg',
-				'alt':'Fried Chicken',
-				'answer':'f*ck'
-			},'crossfit':{
-				'pic':'images/crossfit.jpeg',
-				'alt':'Someone who does crossfit',
-				'answer':'f*ck'
-			},'vegan':{
-				'pic':'images/vegan.jpg',
-				'alt':'A Vegan',
-				'answer':'kill'
-			},'bitcoin':{
-				'pic':'images/bitcoin_trader.jpg',
-				'alt':'A Bitcoin Trader',
-				'answer':'marry'
-			},'baldwin':{
-				'pic':'images/baldwin_trump.jpeg',
-				'alt':"Alec Baldwin on SNL",
-				'answer':'marry'
-			},'garrison':{
-				'pic':'images/garrison_trump.jpeg',
-				'alt':'Mr Garrison as Trump on SouthPark',
-				'answer':'f*ck'
-			},'cheeto':{
-				'pic':'images/cheetoh_trump.jpeg',
-				'alt':'A Cheeto which is Orange, like Trump',
-				'answer':'kill'
-			},'homer':{
-				'pic':'images/homer.jpeg',
-				'alt':'Homer Simpson',
-				'answer':'kill'
-			},'peter':{
-				'pic':'images/family_guy.jpeg',
-				'alt':'Peter Griffin',
-				'answer':'f*ck'
-			},'randy':{
-				'pic':'images/randy.jpeg',
-				'alt':'Randy Marsh',
-				'answer':'marry'
-			},'russet':{
-				'pic':'images/russet_fries.jpeg',
-				'alt':'Russet Fries',
-				'answer':'marry'
-			},'curly':{
-				'pic':'images/curly_fries.jpeg',
-				'alt':'Curly Fries',
-				'answer':'f*ck'
-			},'waffle':{
-				'pic':'images/waffle_fries.jpeg',
-				'alt':'Waffle Fries',
-				'answer':'kill'
-			}
-		},
-		'batches':[
-		  ['burrito','pizza','chicken'],
-		  ['crossfit','vegan','bitcoin'],
-		  ['baldwin','garrison','cheeto'],
-		  ['peter','randy','homer'],
-		  ['curly','russet','waffle']
-		],
-		'category':[
-		  'What could you eat for the rest of your life...',
-		  'A crossfit athlete, a vegan, and a bitcoin trader walk into a bar...',
-		  'Best Trump Impression...',
-		  'Best Cartoon Dad...',
-		  'Picking between fries is tough, but so is life...'
-		],
-		'response':[
-		  'Great answer! Clearly a burrito is going to be the kind of provider we need',
-		  'You got it! With how Bitcoin has been performing, call me a gold digger',
-		  'One step closer to friendship, gotta love Baldwin as Trump!',
-		  'Randy is the funniest cartoon character of all time.',
-		  'Sometimes ya just gotta go with the classics'
-		],
-		'correct':0,
-		'incorrect':0,
-		'correctCount':0,
-		'nextQuestion':true
-	}
 
 	function toggleDisplay(selector){
 		$(selector).toggleClass('hide-it')
@@ -115,24 +20,25 @@ $(document).ready(function(){
 	}
 
     function checkAnswers(){
-    	state.correctCount = 0;
+    	var correctCount = 0;
+		var nextQuestion = false;
     	$('.line-up').find('.card').each(function(){
     		var correct = $(this).find('.img').attr('data-answer');
     		correct = String(correct);
     		var userAnswer = $(this).find('.ui-droppable.answer-box.answered').text();
     		userAnswer = String(userAnswer);
     		userAnswer = userAnswer.trim();
-    		console.log(userAnswer);
     		if(userAnswer===''){
-    			state.nextQuestion = false;
+    			nextQuestion = false;
     		} else {
 	    		if(correct.toLowerCase()===userAnswer.toLowerCase()){
-	    			state.correctCount += 1;
+	    			correctCount += 1;
 	    		}
     		}
     	});
     	if(state.nextQuestion===true ){
     		if(state.correctCount===3){
+				// update game round correct value to true 
 				state.correct += 1;
 				tallyCorrect()
 				if(state.round===5){
@@ -142,6 +48,7 @@ $(document).ready(function(){
     				renderAnswers();
 				}
     		} else {
+				// update game round correct value to false
 				state.incorrect += 1;
 				tallyIncorrect();
 				if(state.round===5){
@@ -162,8 +69,11 @@ $(document).ready(function(){
     }
 
 	function shuffleCards(){
+		//grab current round
+		// replace with game round category
 		$('.title').html(state.category[state.round])
 		var cards = [];
+		// grab current 
 		var batch = state.batches[state.round];
 		for (var key in batch){
 			var card = state.images[batch[key]];
@@ -186,15 +96,15 @@ $(document).ready(function(){
 		toggleDisplay('.m-choice');
 	}
 
-	function renderCards(img){
+	function renderCards(imgObj){
 		var card = 
 			`<div class="col-4">
 				<div class="card">
 					<div class="image-wrapper">
-						<img class="img" data-answer="${img.answer}" src="${img.pic}" alt="${img.alt}"/>
+						<img class="img" data-answer="${imgObj.answer}" src="${imgObj.pic}" alt="${imgObj.alt}"/>
 					</div>
 					<div class="droppable answer-box">
-						<span class="description">${img.alt}</span>
+						<span class="description">${imgObj.alt}</span>
 						<p>Place your answer here!</p>
 					</div>
 				</div>
@@ -282,9 +192,11 @@ $(document).ready(function(){
 	}
 
     function renderStart(){
+		//get total image count
 		var randKeys = Object.keys(state.images);
+		//grab 3 random numbers between 1 and max number of images
 		randKeys = randKeys.sort(() => .5 - Math.random()).slice(0,3);
-		var cards = randKeys.map((key) => renderCards(state.images[key]));
+		var cards = randKeys.map((key) => renderCards(make mongo request for image with img number));
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
@@ -295,18 +207,6 @@ $(document).ready(function(){
 		toggleDisplay('.instructions');
 		renderGamePlay();
 	})
-
-	$('[data-popup-open]').on('click', function(e)  {
-		var targeted_popup_class = $(this).attr('data-popup-open');
-		$('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
-		e.preventDefault();
-	});
-
-	$('[data-popup-close]').on('click', function(e)  {
-		var targeted_popup_class = jQuery(this).attr('data-popup-close');
-		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
-		e.preventDefault();
-	});
 
 	renderStart()
 });
