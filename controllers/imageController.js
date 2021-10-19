@@ -30,20 +30,20 @@ const imageController = {
     }
   },
 
-  awsUploadImg: (imgObj) => {
-    //need to return something here
-    const upload = multer({
-      fileFilter,
-      storage: multerS3({
-        acl: "public-read",
-        s3,
-        bucket: AWS_BUCKET,
-        metadata: {REPLACE ME WITH APPROPRIATE FUNCTION},
-        key: {REPLACE ME WITH APPROPRIATE FUNCTION}
-      })
-    });
-    // figure out how to return info about the aws s3 file that was just saved
-  },
+  // awsUploadImg: (imgObj) => {
+  //   //need to return something here
+  //   const upload = multer({
+  //     fileFilter,
+  //     storage: multerS3({
+  //       acl: "public-read",
+  //       s3,
+  //       bucket: AWS_BUCKET,
+  //       metadata: {REPLACE ME WITH APPROPRIATE FUNCTION},
+  //       key: {REPLACE ME WITH APPROPRIATE FUNCTION}
+  //     })
+  //   });
+  //   // figure out how to return info about the aws s3 file that was just saved
+  // },
   
   mongoStorePath: (awsImg) => {
     let Image = new Images(awsImg)
@@ -55,6 +55,21 @@ const imageController = {
         err.status = 500
         err.location = 'mongoStorePath'
         throw err
+      })
+  },
+
+  mongoFetchPath: (imgKey) => {
+    Images.findOne({'image_key':imgKey})
+      .then(img => {
+        if(img){
+          const cardData = img.genCardData()
+          return resolve(cardData)
+        } else {
+          let err = new Error('Mongo did not respond with img')
+          err.status = 500
+          err.location = 'mongoFetchPath'
+          throw err
+        }
       })
   }
 }

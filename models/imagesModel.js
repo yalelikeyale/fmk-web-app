@@ -4,12 +4,20 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 
 const Image = new Schema({
-  img: {type: String},
+  img_path: {type: String},
   alt: {type: String},
   answer: {type: String},
-  img_name: {type: String},
-  img_number:{type: Number}
+  image_key: {type: String}
 });
+
+User.methods.genCardData = function() {
+  return {
+    alt: this.alt,
+    img_path: this.imgage_path,
+    answer: this.answer,
+    image_key: this.image_key
+  };
+};
   
 const Images = mongoose.model('Image', Image);
   

@@ -1,10 +1,28 @@
- 'use strict'
+'use strict'
 
- // replace state object with mongo gameState model
- // once state is updated, make requests to images endpoint to get cards
- // try and move as much logic to backend and leave event listeners and api requests to front end
-
+// 
 $(document).ready(function(){
+	const GameState = {
+		'round':0,
+		'batches':[
+		  ['burrito','pizza','chicken'],
+		  ['crossfit','vegan','bitcoin'],
+		  ['baldwin','garrison','cheeto'],
+		  ['peter','randy','homer'],
+		  ['curly','russet','waffle']
+		],
+		'category':[
+		  'What could you eat for the rest of your life...',
+		  'A crossfit athlete, a vegan, and a bitcoin trader walk into a bar...',
+		  'Best Trump Impression...',
+		  'Best Cartoon Dad...',
+		  'Picking between fries is tough, but so is life...'
+		],
+		'correct':0,
+		'incorrect':0,
+		'correctCount':0,
+		'nextQuestion':true
+	}
 
 	function toggleDisplay(selector){
 		$(selector).toggleClass('hide-it')
@@ -23,15 +41,8 @@ $(document).ready(function(){
 		$('.js-tally-incorrect').html(state.incorrect);
 	}
 
-	// post game/save
-	function saveGameState(){
-		//make all writes to update game state from here
-	}
-
-	//move this to check answers post request router /game/check
     function checkAnswers(){
-    	var correctCount = 0;
-		var nextQuestion = false;
+    	state.correctCount = 0;
     	$('.line-up').find('.card').each(function(){
     		var correct = $(this).find('.img').attr('data-answer');
     		correct = String(correct);
@@ -39,16 +50,15 @@ $(document).ready(function(){
     		userAnswer = String(userAnswer);
     		userAnswer = userAnswer.trim();
     		if(userAnswer===''){
-    			nextQuestion = false;
+    			state.nextQuestion = false;
     		} else {
 	    		if(correct.toLowerCase()===userAnswer.toLowerCase()){
-	    			correctCount += 1;
+	    			state.correctCount += 1;
 	    		}
     		}
     	});
     	if(state.nextQuestion===true ){
     		if(state.correctCount===3){
-				// update game state
 				state.correct += 1;
 				tallyCorrect()
 				if(state.round===5){
@@ -58,7 +68,6 @@ $(document).ready(function(){
     				renderAnswers();
 				}
     		} else {
-				// update game state
 				state.incorrect += 1;
 				tallyIncorrect();
 				if(state.round===5){
@@ -70,7 +79,6 @@ $(document).ready(function(){
     		}
     	} else {
     		alert('I know this game can leave you choosing between a turdsandwich and a douche, but you have to choose all three.')
-			//update game state
     		state.round -= 1;
     		state.correctCount = 0;
     		state.nextQuestion = true;
@@ -79,19 +87,41 @@ $(document).ready(function(){
     	}
     }
 
-	// get request to /images
+	function renderCards(img){
+		var card = 
+			`<div class="col-4">
+				<div class="card">
+					<div class="image-wrapper">
+						<img class="img" data-answer="${img.answer}" src="${img.imgPath}" alt="${img.alt}"/>
+					</div>
+					<div class="droppable answer-box">
+						<span class="description">${img.alt}</span>
+						<p>Place your answer here!</p>
+					</div>
+				</div>
+			</div>`	
+        return card
+        }
+
+	function renderImg(imgKey){
+		// mongo fetch image info
+		// get request to backend to fetch aws path for each img
+		
+	}
+
 	function shuffleCards(){
-		//save game state
-		$('.title').html(gameState.prompt)
+		$('.title').html(state.category[state.round])
 		var cards = [];
-		for (var image_name in gameState.batch){
-			var card = state.images[batch[key]];
+		var batch = state.batches[state.round];
+		for (var key in batch){
+			//replace with render image
+			var card = renderImg(batch[key])
+			// var card = state.images[batch[key]];
 			card = renderCards(card);
 			cards.push(card);
 		}
 		cards = cards.join("");
 		$('.line-up').html(cards);
-		//update game data layer
 		state.round += 1;
 		$( ".droppable" ).droppable({
 			accept:'.draggable',
@@ -106,24 +136,7 @@ $(document).ready(function(){
 		toggleDisplay('.m-choice');
 	}
 
-	// move backend
-	function renderCards(imgObj){
-		var card = 
-			`<div class="col-4">
-				<div class="card">
-					<div class="image-wrapper">
-						<img class="img" data-answer="${imgObj.answer}" src="${imgObj.pic}" alt="${imgObj.alt}"/>
-					</div>
-					<div class="droppable answer-box">
-						<span class="description">${imgObj.alt}</span>
-						<p>Place your answer here!</p>
-					</div>
-				</div>
-			</div>`	
-        return card
-        }
-    // move backend
-	function renderAnswers(){
+	function renderAnswers(img){
 		var answers = 
 			`<div class="row"> 
 				<div class="col-4">
@@ -148,7 +161,6 @@ $(document).ready(function(){
 		});
         }
 
-	// app get game/over
     function renderEnd(){
     	var selectors = ['.correct.top','.correct.bottom','.incorrect','.answer-wrapper']
     	selectors.map((selector) => toggleDisplay(selector));
@@ -156,12 +168,11 @@ $(document).ready(function(){
     	$('.fmk').toggleClass('col-6 col-12');
     	$('.play-button').on('click', function(){
     		toggleDisplay('.answer-wrapper');
-			//update game data layer
     		state.round = 0;
     		state.correct = 0;
     		state.incorrect = 0;
-			//save game state
-			//restart game
+    		tallyCorrect();
+    		tallyIncorrect();
     		renderGamePlay();
     	});
     	$('.title').html(`We agreed on ${state.correct} out of 5`)
@@ -188,8 +199,6 @@ $(document).ready(function(){
     	}
     }
 
-
-	// move to indexjs of sub play folder app get /game/play
 	function renderGamePlay(){
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
 		toggleDisplay('.instruct-title');
@@ -206,13 +215,10 @@ $(document).ready(function(){
 		})
 	}
 
-	// /game
     function renderStart(){
-		//initialize game state
 		var randKeys = Object.keys(state.images);
-		//grab 3 random numbers between 1 and max number of images
 		randKeys = randKeys.sort(() => .5 - Math.random()).slice(0,3);
-		var cards = randKeys.map((key) => renderCards(make mongo request for image with img number));
+		var cards = randKeys.map((key) => renderCards(state.images[key]));
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
@@ -223,6 +229,18 @@ $(document).ready(function(){
 		toggleDisplay('.instructions');
 		renderGamePlay();
 	})
+
+	$('[data-popup-open]').on('click', function(e)  {
+		var targeted_popup_class = $(this).attr('data-popup-open');
+		$('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+		e.preventDefault();
+	});
+
+	$('[data-popup-close]').on('click', function(e)  {
+		var targeted_popup_class = jQuery(this).attr('data-popup-close');
+		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+		e.preventDefault();
+	});
 
 	renderStart()
 });

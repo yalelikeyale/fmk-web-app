@@ -15,7 +15,7 @@ const connectEnsureLogin = require('connect-ensure-login');
 mongoose.Promise = global.Promise;
 
 const {Users} = require('./models')
-const { usersRouter, imagesRouter, gameRouter } = require('./routers');
+const { usersRouter, imagesRouter} = require('./routers');
 
 const app = express();
 
@@ -68,7 +68,6 @@ app.get('/game', connectEnsureLogin.ensureLoggedIn('/login'), (req, res) => {
 });
 
 app.use('/users',   usersRouter);
-app.use('/game',   gameRouter);
 app.use('/images',   imagesRouter);
 
 let server;

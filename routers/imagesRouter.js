@@ -18,7 +18,7 @@ imagesRouter.post('/', multer, (req, res) => {
         } else {
           let err = new Error('No Image Data Returned')
           err.status = 500
-          err.location = 'Images Router'
+          err.location = 'Images Post Router'
           throw err
         }
       } catch(error) {
@@ -31,5 +31,28 @@ imagesRouter.post('/', multer, (req, res) => {
     }
   uploadToAWS(imgObj)
   })
+
+imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
+  const imgKey = req.params.image_key
+  async function fetchImageData(key){
+    try{
+      const imgData = await imageController.mongoFetchPath(imgKey)
+        if(imgData){
+          return res.status(201).json(imgData);
+        } else {
+          let err = new Error('No Image Data Returned')
+          err.status = 500
+          err.location = 'Images Get Router'
+        }
+      } catch(error) {
+        return Promise.reject({
+          code: error.status,
+          message: error.message,
+          location: error.location
+        });
+      }
+  }
+  fetchImageData(imgKey)
+})
   
   module.exports = {usersRouter};
