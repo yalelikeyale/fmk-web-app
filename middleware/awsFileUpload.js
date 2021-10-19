@@ -7,11 +7,12 @@ const config = require('dotenv').config()
 const AWS_KEY = process.env.AWS_KEY
 const AWS_SECRET = process.env.AWS_SECRET
 const AWS_BUCKET = process.env.AWS_BUCKET
+const AWS_REGION = process.env.AWS_REGION
 
 const s3 = new aws.S3({
     secretAccessKey: AWS_KEY,
     accessKeyId: AWS_SECRET,
-    region: "us-west-2",
+    region: AWS_REGION,
   });
 
   var awsFileUpload = multer({
