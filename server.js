@@ -3,6 +3,7 @@ const DB_PORT = process.env.PORT || 8080;
 const DB_URL = encodeURI(process.env.DB_URL);
 const API_KEY = process.env.API_KEY
 const express = require('express');
+const cors = require("cors");
 const aws = require('aws-sdk');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -12,10 +13,9 @@ const session = require('express-session')
 const connectEnsureLogin = require('connect-ensure-login');
 
 mongoose.Promise = global.Promise;
-const JWT_SECRET = process.env.JWT_SECRET
 
-const { usersRouter, imagesRouter } = require('./routers');
-const { Users, Images } = require('./models')
+const {Users} = require('./models')
+const { usersRouter, imagesRouter, gameRouter } = require('./routers');
 
 const app = express();
 
@@ -28,7 +28,8 @@ app.use(session({
 
 app.use(
   [
-    morgan('common'), 
+    morgan('common'),
+    cors,
     bodyParser.urlencoded({ extended: false }),
     bodyParser.json(),
     passport.initialize(),
@@ -67,13 +68,14 @@ app.get('/game', connectEnsureLogin.ensureLoggedIn('/login'), (req, res) => {
 });
 
 app.use('/users',   usersRouter);
+app.use('/game',   gameRouter);
+app.use('/images',   imagesRouter);
 
 let server;
 function runServer(dbURI, port) {
   return new Promise((resolve, reject) => {
     mongoose.connect(dbURI, err => {
       if (err) {
-        console.log(err);
         return reject(err);
       }
       server = app.listen(port, () => {

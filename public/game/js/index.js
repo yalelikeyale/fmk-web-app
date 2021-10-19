@@ -1,4 +1,8 @@
-'use strict'
+ 'use strict'
+
+ // replace state object with mongo gameState model
+ // once state is updated, make requests to images endpoint to get cards
+ // try and move as much logic to backend and leave event listeners and api requests to front end
 
 $(document).ready(function(){
 
@@ -19,6 +23,12 @@ $(document).ready(function(){
 		$('.js-tally-incorrect').html(state.incorrect);
 	}
 
+	// post game/save
+	function saveGameState(){
+		//make all writes to update game state from here
+	}
+
+	//move this to check answers post request router /game/check
     function checkAnswers(){
     	var correctCount = 0;
 		var nextQuestion = false;
@@ -38,7 +48,7 @@ $(document).ready(function(){
     	});
     	if(state.nextQuestion===true ){
     		if(state.correctCount===3){
-				// update game round correct value to true 
+				// update game state
 				state.correct += 1;
 				tallyCorrect()
 				if(state.round===5){
@@ -48,7 +58,7 @@ $(document).ready(function(){
     				renderAnswers();
 				}
     		} else {
-				// update game round correct value to false
+				// update game state
 				state.incorrect += 1;
 				tallyIncorrect();
 				if(state.round===5){
@@ -60,6 +70,7 @@ $(document).ready(function(){
     		}
     	} else {
     		alert('I know this game can leave you choosing between a turdsandwich and a douche, but you have to choose all three.')
+			//update game state
     		state.round -= 1;
     		state.correctCount = 0;
     		state.nextQuestion = true;
@@ -68,20 +79,19 @@ $(document).ready(function(){
     	}
     }
 
+	// get request to /images
 	function shuffleCards(){
-		//grab current round
-		// replace with game round category
-		$('.title').html(state.category[state.round])
+		//save game state
+		$('.title').html(gameState.prompt)
 		var cards = [];
-		// grab current 
-		var batch = state.batches[state.round];
-		for (var key in batch){
+		for (var image_name in gameState.batch){
 			var card = state.images[batch[key]];
 			card = renderCards(card);
 			cards.push(card);
 		}
 		cards = cards.join("");
 		$('.line-up').html(cards);
+		//update game data layer
 		state.round += 1;
 		$( ".droppable" ).droppable({
 			accept:'.draggable',
@@ -96,6 +106,7 @@ $(document).ready(function(){
 		toggleDisplay('.m-choice');
 	}
 
+	// move backend
 	function renderCards(imgObj){
 		var card = 
 			`<div class="col-4">
@@ -111,8 +122,8 @@ $(document).ready(function(){
 			</div>`	
         return card
         }
-
-	function renderAnswers(img){
+    // move backend
+	function renderAnswers(){
 		var answers = 
 			`<div class="row"> 
 				<div class="col-4">
@@ -137,6 +148,7 @@ $(document).ready(function(){
 		});
         }
 
+	// app get game/over
     function renderEnd(){
     	var selectors = ['.correct.top','.correct.bottom','.incorrect','.answer-wrapper']
     	selectors.map((selector) => toggleDisplay(selector));
@@ -144,11 +156,12 @@ $(document).ready(function(){
     	$('.fmk').toggleClass('col-6 col-12');
     	$('.play-button').on('click', function(){
     		toggleDisplay('.answer-wrapper');
+			//update game data layer
     		state.round = 0;
     		state.correct = 0;
     		state.incorrect = 0;
-    		tallyCorrect();
-    		tallyIncorrect();
+			//save game state
+			//restart game
     		renderGamePlay();
     	});
     	$('.title').html(`We agreed on ${state.correct} out of 5`)
@@ -175,6 +188,8 @@ $(document).ready(function(){
     	}
     }
 
+
+	// move to indexjs of sub play folder app get /game/play
 	function renderGamePlay(){
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
 		toggleDisplay('.instruct-title');
@@ -191,8 +206,9 @@ $(document).ready(function(){
 		})
 	}
 
+	// /game
     function renderStart(){
-		//get total image count
+		//initialize game state
 		var randKeys = Object.keys(state.images);
 		//grab 3 random numbers between 1 and max number of images
 		randKeys = randKeys.sort(() => .5 - Math.random()).slice(0,3);
