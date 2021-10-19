@@ -1,6 +1,6 @@
 
 import express from 'express';
-import multer from 'multer';
+
 import { imageController } from '../controllers';
 
 // this is where signup is grabbed ... bit different than i've been doing it 
@@ -11,7 +11,8 @@ imagesRouter.post('/', multer, (req, res) => {
     const imgObj = req.body
     async function uploadToAWS(imgObj){
       try{
-          const imgData = imageController.uploadImg(imgObj)
+          await imageController.checkFileType(imgObj.file)
+          const imgData = await imageController.uploadImg(imgObj)
         if(imgData){
           return res.status(201).json(imgData.path);
         } else {
@@ -28,7 +29,7 @@ imagesRouter.post('/', multer, (req, res) => {
         });
       }
     }
-
+  uploadToAWS(imgObj)
   })
   
   module.exports = {usersRouter};
