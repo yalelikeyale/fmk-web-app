@@ -10,7 +10,7 @@ const Image = new Schema({
   image_key: {type: String}
 });
 
-User.methods.genCardData = function() {
+Image.methods.genCardData = function() {
   return {
     alt: this.alt,
     img_path: this.imgage_path,

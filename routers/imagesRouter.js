@@ -1,36 +1,17 @@
 
-import express from 'express';
+const express = require('express');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
-import { imageController } from '../controllers';
-
-// this is where signup is grabbed ... bit different than i've been doing it 
+const { awsFileUpload } = require('../middleware')
+const { imageController } = require('../controllers');
 
 const imagesRouter = express.Router();
 
-imagesRouter.post('/', multer, (req, res) => {
-    const imgObj = req.body
-    async function uploadToAWS(imgObj){
-      try{
-          await imageController.checkFileType(imgObj.file)
-          const imgData = await imageController.uploadImg(imgObj)
-        if(imgData){
-          return res.status(201).json(imgData.path);
-        } else {
-          let err = new Error('No Image Data Returned')
-          err.status = 500
-          err.location = 'Images Post Router'
-          throw err
-        }
-      } catch(error) {
-        return Promise.reject({
-          code: error.status,
-          message: error.message,
-          location: error.location
-        });
-      }
-    }
-  uploadToAWS(imgObj)
-  })
+imagesRouter.post('/', awsFileUpload.array('photos', 3), (req, res) => {
+  let imgFiles = req.files
+  console.log(imgFiles)
+})
 
 imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
   const imgKey = req.params.image_key
@@ -55,4 +36,4 @@ imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
   fetchImageData(imgKey)
 })
   
-  module.exports = {usersRouter};
+  module.exports = {imagesRouter};

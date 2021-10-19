@@ -4,7 +4,6 @@ const DB_URL = encodeURI(process.env.DB_URL);
 const API_KEY = process.env.API_KEY
 const express = require('express');
 const cors = require("cors");
-const aws = require('aws-sdk');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');

@@ -85,11 +85,11 @@ const usersController = {
             }
             return resolve()
         })
-        .catch(err){
+        .catch(err => {
             err.status = 500
             err.location = 'checkExistingUsers'
             throw err
-        }
+        })
     },
     createNewUser: (userObj) => {
         let {username, firstName, lastName, password} = userObj
