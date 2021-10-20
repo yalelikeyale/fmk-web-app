@@ -17,7 +17,7 @@ const { imageController } = require('../controllers');
 const s3 = new aws.S3({
     secretAccessKey: AWS_KEY,
     accessKeyId: AWS_SECRET,
-    region: AWS_REGION,
+    region: AWS_REGION
   });
 
 const upload = multer({
