@@ -20,16 +20,25 @@ const s3 = new aws.S3({
     region: AWS_REGION,
   });
 
-  let awsFileUpload = multer({
-    storage: multerS3({
-      s3,
-      bucket: AWS_BUCKET
-    })
+const upload = multer({
+  storage: multerS3({
+    s3,
+    acl: "public-read",
+    bucket: AWS_BUCKET,
+    metadata: function(req, file, cb) {
+      console.log("passed1"); // prints
+      cb(null, {fieldName: "file.fieldname"});
+    },
+    key: function(req, file, cb) {
+      console.log("passed2"); // prints
+      cb(null, Date.now().toString());
+    }
   })
+});
 
 const imagesRouter = express.Router();
 
-imagesRouter.post('/', awsFileUpload.single('img_file_name'), (req, res, next) => {
+imagesRouter.post('/', upload.single('img_file_name'), (req, res, next) => {
   console.log(req.file)
   res.status(200).send('uploaded!')
 })
