@@ -3,35 +3,37 @@ const {Users} = require('../models');
 
 const usersController = {
     checkRequiredFields: (userObj) => {
-      console.log(userObj)
-      const requiredFields = ['username', 'password'];
-      const missingField = requiredFields.find(field => !(field in userObj));
-      console.log(missingField)
-      if (missingField) {
-          // reject to trigger catch
-          console.log('inside if statement so need to throw error differently')
-          let err = new Error('Missing required field')
-          err.status = 422
-          err.location = 'usersController'
-          return Promise.reject(err)
-      }
-      console.log('in check required made it to promise.resolve')
-      return Promise.resolve(true)
+      return new Promise((resolve, reject)=>{
+        const requiredFields = ['username', 'password'];
+        const missingField = requiredFields.find(field => !(field in userObj));
+        console.log(missingField)
+        if (missingField) {
+            // reject to trigger catch
+            console.log('inside if statement so need to throw error differently')
+            let err = new Error('Missing required field')
+            err.status = 422
+            err.location = 'usersController'
+            reject(err)
+        }
+        console.log('in check required made it to promise.resolve')
+        resolve()
+      })
     },
     checkStringFields: (userObj) => {
-        const stringFields = ['username', 'password', 'firstName', 'lastName'];
-        const nonStringField = stringFields.find(
-          field => field in userObj && typeof userObj[field] !== 'string'
-        );
-      
-        if (nonStringField) {
-          // reject to trigger catch
-          let err = new Error('Field must be a string')
-          err.status = 422
-          err.location = 'checkStringFields'
-          return Promise.reject(err)
-        }
-        return true
+      console.log('made it inside check string fields')
+      const stringFields = ['username', 'password', 'firstName', 'lastName'];
+      const nonStringField = stringFields.find(
+        field => field in userObj && typeof userObj[field] !== 'string'
+      );
+    
+      if (nonStringField) {
+        // reject to trigger catch
+        let err = new Error('Field must be a string')
+        err.status = 422
+        err.location = 'checkStringFields'
+        return Promise.reject(err)
+      }
+      return true
     }, 
     checkTrimmedFields: (userObj) => {
         const explicityTrimmedFields = ['username', 'password'];
