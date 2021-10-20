@@ -21,11 +21,10 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
     if(dbImg){
       res.status(201).json(dbImg)
     } else {
-      return Promise.reject(new Error{
-        code: 500,
-        message: 'no dbImg to return',
-        location: 'else statement of images post router '
-      });
+      let error = new Error('no dbImg to return')
+      error.status = 500 
+      error.location = 'else statement of images post router '
+      return Promise.reject(error);
     }
   } catch (error) {
     return Promise.reject({
@@ -44,11 +43,10 @@ imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
         if(imgData){
           res.status(201).json(imgData);
         } else {
-          return Promise.reject(new Error{
-            code: 500,
-            message: 'no dbImg to return',
-            location: 'else statement of images get router '
-          });
+          let error = new Error('no dbImg to return')
+          error.status = 500 
+          error.location = 'else statement of images post router '
+          return Promise.reject(error);
         }
       } catch(error) {
         return Promise.reject({
