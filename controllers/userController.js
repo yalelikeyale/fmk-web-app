@@ -11,8 +11,9 @@ const usersController = {
             let err = new Error('Missing required field')
             err.status = 422
             err.location = 'usersController'
-            throw error
+            throw err
         }
+        console.log('in check required made it to promise.resolve')
         return Promise.resolve()
     },
     checkStringFields: (userObj) => {
