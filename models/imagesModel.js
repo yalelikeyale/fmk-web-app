@@ -12,7 +12,7 @@ const Image = new Schema({
 Image.methods.genCardData = function() {
   return {
     alt: this.alt,
-    img_name: this.imgage_name,
+    img_name: this.img_name,
     answer: this.answer
   };
 };

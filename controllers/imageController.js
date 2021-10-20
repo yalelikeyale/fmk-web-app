@@ -8,14 +8,9 @@ const imageController = {
   mongoStoreCardData: async (imgObj) => {
     try{
       const img = await Images.create(imgObj)
-      console.log('this is the image')
-      console.log(img)
       const cardData = await img.genCardData()
-      console.log('this is card data')
-      console.log(cardData)
       if(cardData){
-        console.log('made it inside if statement')
-        return resolve(cardData)
+        return cardData
       } else {
         let err = new Error('No Card Data Returned')
         err.status = 500
@@ -35,7 +30,7 @@ const imageController = {
       imgBatch.map(img => {
         let cardData = img.genCardData()
         if(cardData){
-          return resolve(cardData)
+          return cardData
         }
         let err = new Error('No Card Data Returned')
         err.status = 500
