@@ -9,9 +9,7 @@ const imageController = {
     try{
       const img = await Images.create(imgObj)
       const cardData = await img.genCardData()
-      console.log(cardData)
       if(cardData){
-        console.log('in if statement')
         return resolve(cardData)
       } else {
         let err = new Error('No Card Data Returned')
