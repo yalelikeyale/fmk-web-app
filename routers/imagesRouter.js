@@ -8,7 +8,7 @@ const { imageController } = require('../controllers');
 
 const imagesRouter = express.Router();
 
-imagesRouter.post('/', awsFileUpload.array('upl',1), (req, res) => {
+imagesRouter.post('/', awsFileUpload.single('img_file_name'), (req, res) => {
   let imgFiles = req.files
   console.log(imgFiles)
   res.status(200).send('uploaded!')

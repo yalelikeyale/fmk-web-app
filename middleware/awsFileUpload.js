@@ -19,13 +19,7 @@ const s3 = new aws.S3({
     storage: multerS3({
       s3,
       acl: 'public-read',
-      bucket: AWS_BUCKET,
-      metadata: function (req, file, cb) {
-        cb(null, {fieldName: file.fieldname});
-      },
-      key: function (req, file, cb) {
-        cb(null, Date.now().toString())
-      }
+      bucket: AWS_BUCKET
     })
   })
 
