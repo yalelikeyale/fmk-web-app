@@ -13,10 +13,10 @@ const usersController = {
           let err = new Error('Missing required field')
           err.status = 422
           err.location = 'usersController'
-          throw err
+          return Promise.reject(err)
       }
       console.log('in check required made it to promise.resolve')
-      return true
+      return Promise.resolve(true)
     },
     checkStringFields: (userObj) => {
         const stringFields = ['username', 'password', 'firstName', 'lastName'];
@@ -29,7 +29,7 @@ const usersController = {
           let err = new Error('Field must be a string')
           err.status = 422
           err.location = 'checkStringFields'
-          throw err
+          return Promise.reject(err)
         }
         return true
     }, 
