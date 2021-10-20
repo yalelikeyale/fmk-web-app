@@ -14,11 +14,13 @@ const AWS_REGION = process.env.AWS_REGION
 
 const { imageController } = require('../controllers');
 
-const s3 = new aws.S3({
-    secretAccessKey: AWS_KEY,
-    accessKeyId: AWS_SECRET,
-    region: AWS_REGION
-  });
+aws.config.update({
+  secretAccessKey: AWS_SECRET,
+  accessKeyId: AWS_KEY,
+  region: AWS_REGION
+})
+
+const s3 = new aws.S3();
 
 const upload = multer({
   storage: multerS3({
