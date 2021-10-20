@@ -3,14 +3,35 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const { awsFileUpload } = require('../middleware')
+const aws = require('aws-sdk');
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const config = require('dotenv').config()
+const AWS_KEY = process.env.AWS_KEY
+const AWS_SECRET = process.env.AWS_SECRET
+const AWS_BUCKET = process.env.AWS_BUCKET
+const AWS_REGION = process.env.AWS_REGION
+
 const { imageController } = require('../controllers');
+
+const s3 = new aws.S3({
+    secretAccessKey: AWS_KEY,
+    accessKeyId: AWS_SECRET,
+    region: AWS_REGION,
+  });
+
+  let awsFileUpload = multer({
+    storage: multerS3({
+      s3: s3,
+      acl: 'public-read',
+      bucket: AWS_BUCKET
+    })
+  })
 
 const imagesRouter = express.Router();
 
-imagesRouter.post('/', awsFileUpload.single('img_file_name'), (req, res) => {
-  let imgFiles = req.files
-  console.log(imgFiles)
+imagesRouter.post('/', awsFileUpload.single('img_file_name'), (req, res, next) => {
+  console.log(req.file)
   res.status(200).send('uploaded!')
 })
 
