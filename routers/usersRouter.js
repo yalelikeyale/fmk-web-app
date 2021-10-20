@@ -13,9 +13,12 @@ usersRouter.post('/', jsonParser, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
   const userObj = {username, password, firstName, lastName}
+  console.log(userObj)
   async function checkUserRequest(userObj){
     try{
+      console.log('made it inside checkUserRequest')
       await userController.checkRequiredFields(userObj)
+      console.log('made it past check required fields')
       await userController.checkStringFields(userObj)
       await userController.checkTrimmedFields(userObj)
       await userController.checkFieldSize(userObj)
