@@ -8,22 +8,44 @@ const imagesRouter = express.Router();
 
 const { awsUpload } = require('../middleware');
 
-imagesRouter.post('/', awsUpload.single('img_file_name'), (req, res, next) => {
-  console.log(req.file)
-  res.status(200).send('uploaded!')
+imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
+  try{
+    const imgName = req.file.originalname
+    const {alt, answer} = req.body
+    const dbImg = await imageController.mongoStoreCardData({
+      imgName, 
+      alt, 
+      answer
+    })
+    if(dbImg){
+      return res.status(201).json(dbImg)
+    } else {
+      let err = new Error('No dbImg to return')
+      err.status = 500
+      err.location = 'images post router'
+      return res.status(err.status).json({err})
+    }
+  } catch (err) {
+    return Promise.reject({
+      code: error.status,
+      message: error.message,
+      location: error.location
+    });
+  }
 })
 
 imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
   const imgKey = req.params.image_key
   async function fetchImageData(key){
     try{
-      const imgData = await imageController.mongoFetchPath(imgKey)
+      const imgData = await imageController.mongoFetchCardData(imgKey)
         if(imgData){
           return res.status(201).json(imgData);
         } else {
           let err = new Error('No Image Data Returned')
           err.status = 500
           err.location = 'Images Get Router'
+          return res.status(err.status).json({err})
         }
       } catch(error) {
         return Promise.reject({

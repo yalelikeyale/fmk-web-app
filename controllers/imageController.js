@@ -1,35 +1,45 @@
 'use strict';
 
+const { resolveInclude } = require('ejs');
 const {Images} = require('../models');
 
 const imageController = {
 
-  mongoStorePath: (awsImg) => {
-    let Image = new Images(awsImg)
-    Image.save()
-      .then(img => {
-        return resolve(img)
-      })
-      .catch(err => {
+  mongoStoreCardData: async (imgObj) => {
+    try{
+      const img = await Images.create(imgObj)
+      const cardData = await img.genCardData()
+      if(cardData){
+        return resolve(cardData)
+      } else {
+        let err = new Error('No Card Data Returned')
         err.status = 500
-        err.location = 'mongoStorePath'
+        err.location = 'img gen card data'
         throw err
-      })
+      }
+    } catch(err) {
+
+    }
   },
 
-  mongoFetchPath: (imgKey) => {
-    Images.findOne({'image_key':imgKey})
-      .then(img => {
-        if(img){
-          const cardData = img.genCardData()
+  mongoFetchCardData: async (imgKey) => {
+    try{
+      const imgBatch = await Images.find({'image_key':imgKey})
+      imgBatch.map(img => {
+        let cardData = img.genCardData()
+        if(cardData){
           return resolve(cardData)
-        } else {
-          let err = new Error('Mongo did not respond with img')
-          err.status = 500
-          err.location = 'mongoFetchPath'
-          throw err
         }
+        let err = new Error('No Card Data Returned')
+        err.status = 500
+        err.location = 'imgBatch map'
+        throw err
       })
+    } catch(err) {
+      err.status = 500
+      err.location = 'mongoFetchPath'
+      throw err
+    }
   }
 }
 

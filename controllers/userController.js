@@ -32,7 +32,7 @@ const usersController = {
     checkTrimmedFields: (userObj) => {
         const explicityTrimmedFields = ['username', 'password'];
         const nonTrimmedField = explicityTrimmedFields.find(
-          field => req.body[field].trim() !== req.body[field]
+          field => userObj[field].trim() !== userObj[field]
         );
       
         if (nonTrimmedField) {
@@ -80,7 +80,7 @@ const usersController = {
               // There is an existing user with the same username
               let err = new Error('User already Exists')
               err.status = 422
-              err.location = 'checkExistingUsers'
+              err.location = 'count greater than 0'
               throw err
             }
             return resolve()

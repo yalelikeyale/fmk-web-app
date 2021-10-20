@@ -6,15 +6,11 @@ $(document).ready(function(){
 		'round':0,
 		'batches':[
 		  ['burrito','pizza','chicken'],
-		  ['crossfit','vegan','bitcoin'],
-		  ['baldwin','garrison','cheeto'],
 		  ['peter','randy','homer'],
 		  ['curly','russet','waffle']
 		],
 		'category':[
 		  'What could you eat for the rest of your life...',
-		  'A crossfit athlete, a vegan, and a bitcoin trader walk into a bar...',
-		  'Best Trump Impression...',
 		  'Best Cartoon Dad...',
 		  'Picking between fries is tough, but so is life...'
 		],
@@ -61,7 +57,7 @@ $(document).ready(function(){
     		if(state.correctCount===3){
 				state.correct += 1;
 				tallyCorrect()
-				if(state.round===5){
+				if(state.round===3){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -70,7 +66,7 @@ $(document).ready(function(){
     		} else {
 				state.incorrect += 1;
 				tallyIncorrect();
-				if(state.round===5){
+				if(state.round===3){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -92,7 +88,8 @@ $(document).ready(function(){
 			`<div class="col-4">
 				<div class="card">
 					<div class="image-wrapper">
-						<img class="img" data-answer="${img.answer}" src="${img.imgPath}" alt="${img.alt}"/>
+					    // figure out how to reference aws s3 public objects from img src 
+						<img class="img" data-answer="${img.answer}" src="https://aws.s3.com/${img.img_name}" alt="${img.alt}"/>
 					</div>
 					<div class="droppable answer-box">
 						<span class="description">${img.alt}</span>

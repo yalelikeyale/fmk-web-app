@@ -27,7 +27,7 @@ usersRouter.post('/', jsonParser, (req, res) => {
         let err = new Error('No User ID returned')
         err.status = 500
         err.location = 'Users Router'
-        throw err
+        return res.status(err.status).json({err})
       }
     } catch(error) {
       return Promise.reject({
