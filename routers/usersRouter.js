@@ -15,18 +15,19 @@ usersRouter.post('/', jsonParser, async (req, res) => {
   const userObj = {username, password, firstName, lastName}
   try{
     await userController.checkRequiredFields(userObj)
+    console.log('made it past check required fields')
     await userController.checkStringFields(userObj)
     await userController.checkTrimmedFields(userObj)
     await userController.checkFieldSize(userObj)
     await userController.checkExistingUsers(userObj.username)
     let userId = await userController.createNewUser(userObj)
     if(userId){
-      return res.status(201).json(userId);
+      res.status(201).json(userId);
     } else {
       let err = new Error('No User ID returned')
       err.status = 500
       err.location = 'Users Router'
-      return res.status(err.status).json({err})
+      res.status(err.status).json({err})
     }
   } catch(error) {
     return Promise.reject({

@@ -14,7 +14,7 @@ const usersController = {
             throw err
         }
         console.log('in check required made it to promise.resolve')
-        return Promise.resolve()
+        return true
     },
     checkStringFields: (userObj) => {
         const stringFields = ['username', 'password', 'firstName', 'lastName'];
@@ -29,7 +29,7 @@ const usersController = {
           err.location = 'checkStringFields'
           throw err
         }
-        return Promise.resolve()
+        return true
     }, 
     checkTrimmedFields: (userObj) => {
         const explicityTrimmedFields = ['username', 'password'];
@@ -43,7 +43,7 @@ const usersController = {
             err.location = 'checkTrimmedFields'
             throw err
         }
-        return Promise.resolve()
+        return true
     },
     checkFieldSize: (userObj) => {
         const sizedFields = {
@@ -72,7 +72,7 @@ const usersController = {
               err.location = 'checkFieldSize'
               throw err
           }
-          return Promise.resolve()
+          return true
     }, 
     checkExistingUsers: (username) => {
         Users.find({username})
