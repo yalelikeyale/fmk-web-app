@@ -22,8 +22,7 @@ const s3 = new aws.S3({
 
   let awsFileUpload = multer({
     storage: multerS3({
-      s3: s3,
-      acl: 'public-read',
+      s3,
       bucket: AWS_BUCKET
     })
   })
