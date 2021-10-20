@@ -12,7 +12,7 @@ const usersController = {
             err.status = 422
             err.location = 'usersController'
         }
-        return resolve()
+        resolve()
     },
     checkStringFields: (userObj) => {
         const stringFields = ['username', 'password', 'firstName', 'lastName'];
@@ -27,7 +27,7 @@ const usersController = {
           err.location = 'checkStringFields'
           throw err
         }
-        return resolve()
+        resolve()
     }, 
     checkTrimmedFields: (userObj) => {
         const explicityTrimmedFields = ['username', 'password'];
@@ -41,7 +41,7 @@ const usersController = {
             err.location = 'checkTrimmedFields'
             throw err
         }
-        return resolve()
+        resolve()
     },
     checkFieldSize: (userObj) => {
         const sizedFields = {
@@ -70,7 +70,7 @@ const usersController = {
               err.location = 'checkFieldSize'
               throw err
           }
-          return resolve()
+          resolve()
     }, 
     checkExistingUsers: (username) => {
         Users.find({username})
@@ -83,7 +83,7 @@ const usersController = {
               err.location = 'count greater than 0'
               throw err
             }
-            return resolve()
+            resolve()
         })
         .catch(err => {
             err.status = 500
@@ -99,7 +99,7 @@ const usersController = {
             throw new Error('No user returned')
           }
           const userId = user.genHeapIdentity()
-          return resolve(userId)
+          return userId
         })
         .catch(err => {
           err.status = 500
