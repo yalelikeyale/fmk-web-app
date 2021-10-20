@@ -18,7 +18,6 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
       answer
     }
     const dbImg = await imageController.mongoStoreCardData(imgObj)
-    console.log('made it past mongo store card data')
     if(dbImg){
       return res.status(201).json(dbImg)
     } else {
