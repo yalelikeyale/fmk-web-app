@@ -19,12 +19,12 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
     }
     const dbImg = await imageController.mongoStoreCardData(imgObj)
     if(dbImg){
-      return res.status(201).json(dbImg)
+      res.status(201).json(dbImg)
     } else {
       let err = new Error('No dbImg to return')
       err.status = 500
       err.location = 'images post router'
-      return res.status(err.status).json({err})
+      res.status(err.status).json({err})
     }
   } catch (err) {
     return Promise.reject({
@@ -41,12 +41,12 @@ imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
     try{
       const imgData = await imageController.mongoFetchCardData(imgKey)
         if(imgData){
-          return res.status(201).json(imgData);
+          res.status(201).json(imgData);
         } else {
           let err = new Error('No Image Data Returned')
           err.status = 500
           err.location = 'Images Get Router'
-          return res.status(err.status).json({err})
+          res.status(err.status).json({err})
         }
       } catch(error) {
         return Promise.reject({
