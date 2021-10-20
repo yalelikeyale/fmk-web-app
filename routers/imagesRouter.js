@@ -9,9 +9,6 @@ const imagesRouter = express.Router();
 const { awsUpload } = require('../middleware');
 
 imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
-  console.log('made it here')
-  console.log(req.file.originalname)
-  console.log(req.body)
   try{
     const imgName = req.file.originalname
     const {alt, answer} = req.body
@@ -20,8 +17,9 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
       alt, 
       answer
     }
-    console.log(imgObj)
     const dbImg = await imageController.mongoStoreCardData(imgObj)
+    console.log('made it past mongo store card data')
+    console.log(dbImg)
     if(dbImg){
       return res.status(201).json(dbImg)
     } else {
