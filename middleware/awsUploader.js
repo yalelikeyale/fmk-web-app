@@ -23,12 +23,10 @@ const awsUpload = multer({
         acl: "public-read",
         bucket: AWS_BUCKET,
         metadata: function(req, file, cb) {
-        console.log("passed1"); // prints
-        cb(null, {fieldName: "file.fieldname"});
+          cb(null, {fieldName: "file.fieldname"});
         },
         key: function(req, file, cb) {
-        console.log("passed2"); // prints
-        cb(null, Date.now().toString());
+          cb(null, file.originalname);
         }
     })
 });
