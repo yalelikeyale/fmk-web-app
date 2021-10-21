@@ -1,7 +1,7 @@
 'use strict';
 const {Users} = require('../models');
 
-const usersController = {
+const userController = {
   checkExistingUsers: async (username) => {
     try{
       let userExists = await Users.find({username}).count()
@@ -26,4 +26,4 @@ const usersController = {
   }
 }
 
-module.exports = {usersController}
+module.exports = {userController}

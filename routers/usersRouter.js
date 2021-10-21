@@ -22,7 +22,6 @@ usersRouter.post('/', jsonParser, async (req, res, next) => {
         err.location = 'usersController'
         throw err
     }
-    console.log('made it past required fields')
     let userExists = await userController.checkExistingUsers(userObj.username)
     console.log('made it past check if user exists')
     if(userExists>0){
