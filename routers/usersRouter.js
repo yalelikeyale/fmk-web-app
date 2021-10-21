@@ -14,7 +14,15 @@ usersRouter.post('/', jsonParser, async (req, res) => {
   lastName = lastName.trim();
   const userObj = {username, password, firstName, lastName}
   try{
-    userController.checkRequiredFields(userObj)
+    const requiredFields = ['username', 'password'];
+    const missingField = requiredFields.find(field => !(field in userObj));
+    if (missingField) {
+        console.log('inside if statement so need to throw error differently')
+        let err = new Error('Missing required field')
+        err.status = 422
+        err.location = 'usersController'
+        throw err
+    }
     await userController.checkExistingUsers(userObj.username)
     let userId = await userController.createNewUser(userObj)
     return Promise.resolve(userId)

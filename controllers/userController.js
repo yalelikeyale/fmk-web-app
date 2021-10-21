@@ -2,18 +2,8 @@
 const {Users} = require('../models');
 
 const usersController = {
-  checkRequiredFields: (userObj) => {
-    const requiredFields = ['username', 'password'];
-    const missingField = requiredFields.find(field => !(field in userObj));
-    if (missingField) {
-        console.log('inside if statement so need to throw error differently')
-        let err = new Error('Missing required field')
-        err.status = 422
-        err.location = 'usersController'
-        throw err
-    }
-  },
   checkExistingUsers: async (username) => {
+    console.log('inside check existing users')
     try{
       const usrExists = await Users.find({username})
       if(usrExists){
@@ -26,6 +16,7 @@ const usersController = {
     }
   },
   createNewUser: async (userObj) => {
+    console.log('inside create new user')
     let {username, firstName, lastName, password} = userObj
     try{
       const usrCreated = await Users.register({username, firstName, lastName, active:true}, password)
