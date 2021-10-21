@@ -2,117 +2,40 @@
 const {Users} = require('../models');
 
 const usersController = {
-    checkRequiredFields: (userObj) => {
-      return new Promise((resolve, reject)=>{
-        const requiredFields = ['username', 'password'];
-        const missingField = requiredFields.find(field => !(field in userObj));
-        console.log(missingField)
-        if (missingField) {
-            // reject to trigger catch
-            console.log('inside if statement so need to throw error differently')
-            let err = new Error('Missing required field')
-            err.status = 422
-            err.location = 'usersController'
-            reject(err)
-        }
-        console.log('in check required made it to promise.resolve')
-        resolve()
-      })
-    },
-    checkStringFields: (userObj) => {
-      console.log('made it inside check string fields')
-      const stringFields = ['username', 'password', 'firstName', 'lastName'];
-      const nonStringField = stringFields.find(
-        field => field in userObj && typeof userObj[field] !== 'string'
-      );
-    
-      if (nonStringField) {
-        // reject to trigger catch
-        let err = new Error('Field must be a string')
+  checkRequiredFields: (userObj) => {
+    const requiredFields = ['username', 'password'];
+    const missingField = requiredFields.find(field => !(field in userObj));
+    if (missingField) {
+        console.log('inside if statement so need to throw error differently')
+        let err = new Error('Missing required field')
         err.status = 422
-        err.location = 'checkStringFields'
-        return Promise.reject(err)
-      }
-      return true
-    }, 
-    checkTrimmedFields: (userObj) => {
-        const explicityTrimmedFields = ['username', 'password'];
-        const nonTrimmedField = explicityTrimmedFields.find(
-          field => userObj[field].trim() !== userObj[field]
-        );
-      
-        if (nonTrimmedField) {
-            let err = new Error('Cannot begin or end field with empty space')
-            err.status = 422
-            err.location = 'checkTrimmedFields'
-            throw err
-        }
-        return true
-    },
-    checkFieldSize: (userObj) => {
-        const sizedFields = {
-            username: {
-              min: 1
-            },
-            password: {
-              min: 6,
-              max: 72
-            }
-          };
-        const tooSmallField = Object.keys(sizedFields).find(
-            field =>
-              'min' in sizedFields[field] &&
-                    userObj[field].trim().length < sizedFields[field].min
-          );
-          const tooLargeField = Object.keys(sizedFields).find(
-            field =>
-              'max' in sizedFields[field] &&
-                    userObj[field].trim().length > sizedFields[field].max
-          );
-          if (tooSmallField || tooLargeField) {
-              // reject promise
-              let err = new Error('Credentials too small or too large')
-              err.status = 422
-              err.location = 'checkFieldSize'
-              throw err
-          }
-          return true
-    }, 
-    checkExistingUsers: (username) => {
-        Users.find({username})
-        .count()
-        .then(count => {
-            if (count > 0) {
-              // There is an existing user with the same username
-              let err = new Error('User already Exists')
-              err.status = 422
-              err.location = 'count greater than 0'
-              throw err
-            }
-            return Promise.resolve()
-        })
-        .catch(err => {
-            err.status = 500
-            err.location = 'checkExistingUsers'
-            throw err
-        })
-    },
-    createNewUser: (userObj) => {
-        let {username, firstName, lastName, password} = userObj
-        Users.register({username, firstName, lastName, active:true}, password)
-        .then(user=>{
-          if(!user){
-            throw new Error('No user returned')
-          }
-          const userId = user.genHeapIdentity()
-          return Promise.resolve(userId)
-        })
-        .catch(err => {
-          err.status = 500
-          err.location = 'createNewUser'
-          throw err
-        })
+        err.location = 'usersController'
+        throw err
     }
+  },
+  checkExistingUsers: async (username) => {
+    try{
+      const usrExists = await Users.find({username})
+      if(usrExists){
+        let error = new Error('User Already Exists')
+        throw error
+      }
+      return Promise.resolve()
+    } catch (err) {
+      throw err
+    }
+  },
+  createNewUser: async (userObj) => {
+    let {username, firstName, lastName, password} = userObj
+    try{
+      const usrCreated = await Users.register({username, firstName, lastName, active:true}, password)
+      if(usrCreated){
+        return usrCreated.genHeapIdentity()
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 module.exports = {usersController}
