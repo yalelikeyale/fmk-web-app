@@ -8,12 +8,12 @@ const {userController} = require('../controllers')
 
 
 // Post to register a new user
-usersRouter.post('/', jsonParser, async (req, res) => {
-  let {username, password, firstName = '', lastName = ''} = req.body;
-  firstName = firstName.trim();
-  lastName = lastName.trim();
-  const userObj = {username, password, firstName, lastName}
+usersRouter.post('/', jsonParser, async (req, res, next) => {
   try{
+    let {username, password, firstName = '', lastName = ''} = req.body;
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    const userObj = {username, password, firstName, lastName}
     const requiredFields = ['username', 'password'];
     const missingField = requiredFields.find(field => !(field in userObj));
     if (missingField) {
@@ -23,15 +23,14 @@ usersRouter.post('/', jsonParser, async (req, res) => {
         err.location = 'usersController'
         throw err
     }
-    await userController.checkExistingUsers(userObj.username)
+    let userExists = await userController.checkExistingUsers(userObj.username)
+    if(userExists){
+      throw new Error('User Already Exists')
+    }
     let userId = await userController.createNewUser(userObj)
-    return Promise.resolve(userId)
+    res.status(201).send(userId)
   } catch(error) {
-    return Promise.reject({
-      code: error.status,
-      message: error.message,
-      location: error.location
-    });
+    next(error)
   }
 })
 
