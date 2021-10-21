@@ -17,16 +17,19 @@ usersRouter.post('/', jsonParser, async (req, res, next) => {
     const requiredFields = ['username', 'password'];
     const missingField = requiredFields.find(field => !(field in userObj));
     if (missingField) {
-        console.log('inside if statement so need to throw error differently')
         let err = new Error('Missing required field')
         err.status = 422
         err.location = 'usersController'
         throw err
     }
+    console.log('made it past required fields')
     let userExists = await userController.checkExistingUsers(userObj.username)
-    if(userExists){
+    console.log('made it past check if user exists')
+    if(userExists>0){
+      console.log('inside user exists if statement')
       throw new Error('User Already Exists')
     }
+    console.log('attempting to create new user')
     let userId = await userController.createNewUser(userObj)
     res.status(201).send(userId)
   } catch(error) {
