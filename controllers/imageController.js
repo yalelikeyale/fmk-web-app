@@ -18,8 +18,6 @@ const imageController = {
         throw err
       }
     } catch(err) {
-      err.status = 500
-      err.location = 'mongoStoreCard Data'
       throw err
     }
   },

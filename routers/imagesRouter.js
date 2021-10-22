@@ -8,12 +8,13 @@ const imagesRouter = express.Router();
 
 const { awsUpload } = require('../middleware');
 
-imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
+imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res, next) => {
   try{
-    const img_name = req.file.originalname
-    const {alt, answer} = req.body
+    const img_file = req.file.originalname
+    const {img_key, alt, answer} = req.body
     const imgObj = {
-      img_name, 
+      img_key,
+      img_file, 
       alt, 
       answer
     }
@@ -24,18 +25,14 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res) => {
       let error = new Error('no dbImg to return')
       error.status = 500 
       error.location = 'else statement of images post router '
-      return Promise.reject(error);
+      throw error
     }
   } catch (error) {
-    return Promise.reject({
-      code: error.status,
-      message: error.message,
-      location: error.location
-    });
+    next(error)
   }
 })
 
-imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
+imagesRouter.get('/:imagekey', jsonParser, (req, res, next) => {
   const imgKey = req.params.image_key
   async function fetchImageData(key){
     try{
@@ -46,14 +43,10 @@ imagesRouter.get('/:imagekey', jsonParser, (req, res) => {
           let error = new Error('no dbImg to return')
           error.status = 500 
           error.location = 'else statement of images post router '
-          return Promise.reject(error);
+          throw error
         }
       } catch(error) {
-        return Promise.reject({
-          code: error.status,
-          message: error.message,
-          location: error.location
-        });
+        next(error)
       }
   }
   fetchImageData(imgKey)
