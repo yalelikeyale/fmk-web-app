@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 
 const Image = new Schema({
-  _id:false,
   img_file: {
     type: String,
     required: true
