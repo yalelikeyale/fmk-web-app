@@ -24,6 +24,7 @@ const Image = new Schema({
 
 Image.methods.genCardData = function() {
   return {
+    img_id: this._id,
     alt: this.alt,
     img_file: this.img_file,
     answer: this.answer
