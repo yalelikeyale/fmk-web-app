@@ -20,7 +20,8 @@ $(document).ready(function(){
 		'correct':0,
 		'incorrect':0,
 		'correctCount':0,
-		'nextQuestion':true
+		'nextQuestion':true, 
+		'imgObjArray':[]
 	}
 
 	function toggleDisplay(selector){
@@ -103,25 +104,28 @@ $(document).ready(function(){
         return card
         }
 
-	function fetchImgObjArray(batch_key){
+	function renderImgObjArray(imgBatchData){
+		GameState.imgObjArray.push(imgBatchData)
+	}
+
+	function fetchImgObjArray(batch_key, callback){
 		const payload = {
 			url:`${location.origin}/images/${batch_key}`,
 			dataType:'json',
 			error: function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success: function(res){
-				return JSON.parse(res)
-			}
+			success: callback(res)
 		}
+
 		$.get(payload)
 	}
 
 	function shuffleCards(){
 		$('.title').html(GameState.category[GameState.round])
 		var batch_key = GameState.batches[GameState.round];
-		var imgObjArray = fetchImgObjArray(batch_key)
-		var cards = imgObjArray.map(img => {
+		fetchImgObjArray(randBatch, renderImgObjArray)
+		var cards = GameState.imgObjArray.map(img => {
 			var card = renderCard(img);
 			return card
 		})
@@ -220,11 +224,13 @@ $(document).ready(function(){
 		})
 	}
 
+
+
     function renderStart(){
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
-		var imgObjArray = fetchImgObjArray(randBatch);
-		var cards = imgObjArray.map(card => {
+		fetchImgObjArray(randBatch, renderImgObjArray)
+		var cards = GameState.imgObjArray.map(card => {
 			renderCard(card)
 		});
 		cards = cards.join("");
