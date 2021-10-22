@@ -25,12 +25,9 @@ const imageController = {
   mongoFetchImgBatch: async (batch_key) => {
     try{
       const imgBatch = await Images.find({batch_key})
-      console.log(imgBatch)
       imgBatch.map(img => {
-        console.log(img)
         let cardData = img.genCardData()
         if(cardData){
-          console.log(cardData)
           return cardData
         }
         let err = new Error('No Card Data Returned')
@@ -38,7 +35,7 @@ const imageController = {
         err.location = 'imgBatch map'
         throw err
       })
-      if(imgBatch===3){
+      if(imgBatch.length===3){
         console.log(imgBatch)
         return imgBatch
       } else {
