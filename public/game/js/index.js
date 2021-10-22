@@ -107,12 +107,14 @@ $(document).ready(function(){
 		const payload = {
 			url:`${location.origin}/images/${batch_key}`,
 			dataType:'json',
-			error:function(error){
+			error: function(error){
 				console.log('error ' + JSON.stringify(error));
+			},
+			success: function(res){
+				return JSON.parse(res)
 			}
 		}
 		var cardBatch = $.get(payload)
-		console.log(cardBatch)
 		return cardBatch
 	}
 
