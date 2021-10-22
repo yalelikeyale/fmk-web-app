@@ -22,9 +22,9 @@ const imageController = {
     }
   },
 
-  mongoFetchCardData: async (imgKey) => {
+  mongoFetchImgData: async (batch_key) => {
     try{
-      const imgBatch = await Images.find({'image_key':imgKey})
+      const imgBatch = await Images.find({batch_key})
       imgBatch.map(img => {
         let cardData = img.genCardData()
         if(cardData){
@@ -35,6 +35,7 @@ const imageController = {
         err.location = 'imgBatch map'
         throw err
       })
+      return imgBatch
     } catch(err) {
       err.status = 500
       err.location = 'mongoFetchPath'

@@ -16,10 +16,8 @@ const Image = new Schema({
     type: String,
     required: true
   },
-  img_key:{
-    type: String,
-    index: true,
-    unique: true,
+  batch_key:{
+    type: String, 
     required: true
   }
 });
@@ -28,8 +26,7 @@ Image.methods.genCardData = function() {
   return {
     alt: this.alt,
     img_file: this.img_name,
-    answer: this.answer,
-    img_key: this.img_key
+    answer: this.answer
   };
 };
   
