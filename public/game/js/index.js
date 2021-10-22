@@ -3,16 +3,19 @@
 // 
 $(document).ready(function(){
 	const GameState = {
+		'awsBucket':'https://fmk-web-app.s3.us-west-2.amazonaws.com/',
 		'round':0,
 		'batches':[
-		  ['burrito','pizza','chicken'],
-		  ['peter','randy','homer'],
-		  ['curly','russet','waffle']
+		  'fast_food',
+		  'cartoon_dads',
+		  'french_fries',
+		  'trump'
 		],
 		'category':[
 		  'What could you eat for the rest of your life...',
 		  'Best Cartoon Dad...',
-		  'Picking between fries is tough, but so is life...'
+		  'Choose your hangover fighter...',
+		  'Best Trump impression...'
 		],
 		'correct':0,
 		'incorrect':0,
@@ -30,15 +33,15 @@ $(document).ready(function(){
 	}
 
 	function tallyCorrect(){
-		$('.js-tally-correct').html(state.correct);
+		$('.js-tally-correct').html(GameState.correct);
 	}
 
 	function tallyIncorrect(){
-		$('.js-tally-incorrect').html(state.incorrect);
+		$('.js-tally-incorrect').html(GameState.incorrect);
 	}
 
     function checkAnswers(){
-    	state.correctCount = 0;
+    	GameState.correctCount = 0;
     	$('.line-up').find('.card').each(function(){
     		var correct = $(this).find('.img').attr('data-answer');
     		correct = String(correct);
@@ -46,27 +49,27 @@ $(document).ready(function(){
     		userAnswer = String(userAnswer);
     		userAnswer = userAnswer.trim();
     		if(userAnswer===''){
-    			state.nextQuestion = false;
+    			GameState.nextQuestion = false;
     		} else {
 	    		if(correct.toLowerCase()===userAnswer.toLowerCase()){
-	    			state.correctCount += 1;
+	    			GameState.correctCount += 1;
 	    		}
     		}
     	});
-    	if(state.nextQuestion===true ){
-    		if(state.correctCount===3){
-				state.correct += 1;
+    	if(GameState.nextQuestion===true ){
+    		if(GameState.correctCount===3){
+				GameState.correct += 1;
 				tallyCorrect()
-				if(state.round===3){
+				if(GameState.round===3){
 					renderEnd();
 				} else {
 					shuffleCards();
     				renderAnswers();
 				}
     		} else {
-				state.incorrect += 1;
+				GameState.incorrect += 1;
 				tallyIncorrect();
-				if(state.round===3){
+				if(GameState.round===3){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -75,21 +78,21 @@ $(document).ready(function(){
     		}
     	} else {
     		alert('I know this game can leave you choosing between a turdsandwich and a douche, but you have to choose all three.')
-    		state.round -= 1;
-    		state.correctCount = 0;
-    		state.nextQuestion = true;
+    		GameState.round -= 1;
+    		GameState.correctCount = 0;
+    		GameState.nextQuestion = true;
     		shuffleCards();
     		renderAnswers();
     	}
     }
 
-	function renderCards(img){
+	function renderCard(img){
 		var card = 
 			`<div class="col-4">
 				<div class="card">
 					<div class="image-wrapper">
 					    // figure out how to reference aws s3 public objects from img src 
-						<img class="img" data-answer="${img.answer}" src="https://aws.s3.com/${img.img_name}" alt="${img.alt}"/>
+						<img class="img" data-answer="${img.answer}" src="${awsBucket}${img.img_file}" alt="${img.alt}"/>
 					</div>
 					<div class="droppable answer-box">
 						<span class="description">${img.alt}</span>
@@ -100,26 +103,30 @@ $(document).ready(function(){
         return card
         }
 
-	function renderImg(imgKey){
-		// mongo fetch image info
-		// get request to backend to fetch aws path for each img
-		
+	function fetchImgObjArray(batch_key){
+		const payload = {
+			url:`${location.origin}/images/${batch_key}`,
+			dataType:'json',
+			error:function(error){
+				console.log('error ' + JSON.stringify(error));
+			}
+		}
+		var cardBatch = $.get(payload)
+		console.log(cardBatch)
+		return cardBatch
 	}
 
 	function shuffleCards(){
-		$('.title').html(state.category[state.round])
-		var cards = [];
-		var batch = state.batches[state.round];
-		for (var key in batch){
-			//replace with render image
-			var card = renderImg(batch[key])
-			// var card = state.images[batch[key]];
-			card = renderCards(card);
-			cards.push(card);
-		}
+		$('.title').html(GameState.category[GameState.round])
+		var batch_key = GameState.batches[GameState.round];
+		var imgObjArray = fetchImgObjArray(batch_key)
+		var cards = imgObjArray.map(img => {
+			var card = renderCard(img);
+			return card
+		})
 		cards = cards.join("");
 		$('.line-up').html(cards);
-		state.round += 1;
+		GameState.round += 1;
 		$( ".droppable" ).droppable({
 			accept:'.draggable',
 			drop: function( event, ui ) {
@@ -205,17 +212,20 @@ $(document).ready(function(){
 		var selectors = ['.correct.top','.correct.bottom','.incorrect','.line','.btn']
 		$('.start .col-12.fmk').toggleClass('col-6 col-12');
 		selectors.map((selector) => toggleDisplay(selector));
-		state.correct = 0;
-		state.incorrect = 0;
+		GameState.correct = 0;
+		GameState.incorrect = 0;
 		$('.submit-button').on('click', function(){
 			checkAnswers();
 		})
 	}
 
     function renderStart(){
-		var randKeys = Object.keys(state.images);
-		randKeys = randKeys.sort(() => .5 - Math.random()).slice(0,3);
-		var cards = randKeys.map((key) => renderCards(state.images[key]));
+		var batchKeys = state.batches
+		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
+		var imgObjArray = fetchImgObjArray(randBatch);
+		var cards = imgObjArray.map(card => {
+			renderCard(card)
+		});
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
@@ -238,6 +248,5 @@ $(document).ready(function(){
 		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
 		e.preventDefault();
 	});
-
 	renderStart()
 });
