@@ -104,30 +104,19 @@ $(document).ready(function(){
         return card
         }
 
-	function renderImgObjArray(imgBatchData){
-		GameState.imgObjArray = imgBatchData;
+	function renderRandomBatch(randBatchData){
+		var cards = randBatchData.map(card => {
+			renderCard(card)
+		});
+		cards = cards.join("");
+		$('.line-up').html(cards);
+		$('.answer-box').addClass('hide-it');
+		toggleDisplay('.instructions');
 	}
 
-	function fetchImgObjArray(batch_key, callback){
-		const payload = {
-			url:`${location.origin}/images/${batch_key}`,
-			dataType:'json',
-			error: function(error){
-				console.log('error ' + JSON.stringify(error));
-			},
-			success: function(res){
-				callback(res)
-			}
-		}
-
-		$.get(payload)
-	}
-
-	function shuffleCards(){
+	function renderShuffleBatch(shuffleBatchData){
 		$('.title').html(GameState.category[GameState.round])
-		var batch_key = GameState.batches[GameState.round];
-		fetchImgObjArray(randBatch, renderImgObjArray)
-		var cards = GameState.imgObjArray.map(img => {
+		var cards = shuffleBatchData.map(img => {
 			var card = renderCard(img);
 			return card
 		})
@@ -145,6 +134,25 @@ $(document).ready(function(){
 	  		}
 		});
 		toggleDisplay('.m-choice');
+	}
+
+	function fetchImgObjArray(batch_key, callback){
+		const payload = {
+			url:`${location.origin}/images/${batch_key}`,
+			dataType:'json',
+			error: function(error){
+				console.log('error ' + JSON.stringify(error));
+			},
+			success: function(res){
+				callback(res)
+			}
+		}
+		$.get(payload)
+	}
+
+	function shuffleCards(){
+		var batch_key = GameState.batches[GameState.round];
+		fetchImgObjArray(randBatch, renderShuffleBatch)
 	}
 
 	function renderAnswers(){
@@ -226,19 +234,10 @@ $(document).ready(function(){
 		})
 	}
 
-
-
     function renderStart(){
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
-		fetchImgObjArray(randBatch, renderImgObjArray)
-		var cards = GameState.imgObjArray.map(card => {
-			renderCard(card)
-		});
-		cards = cards.join("");
-		$('.line-up').html(cards);
-		$('.answer-box').addClass('hide-it');
-		toggleDisplay('.instructions');
+		fetchImgObjArray(randBatch, renderRandomBatch)
 	}
 
 	$('.play-button').on('click', function(){
