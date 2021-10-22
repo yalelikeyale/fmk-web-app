@@ -32,7 +32,7 @@ imagesRouter.post('/', awsUpload.single('img_file_name'), async (req, res, next)
   }
 })
 
-imagesRouter.get('/:batch_key', jsonParser, (req, res, next) => {
+imagesRouter.get('/:batch_key', jsonParser, async (req, res, next) => {
   try{
     const batch_key = req.params.batch_key
     const imgData = await imageController.mongoFetchImgData(batch_key)
