@@ -17,6 +17,9 @@ $('#submit').on('click', function(e){
 		data:JSON.stringify(creds),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
+		},
+		success:function(resp){
+			return JSON.parse(resp.responseJSON)
 		}
 	}
 	$.post(payload)
