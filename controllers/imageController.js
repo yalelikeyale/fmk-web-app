@@ -25,7 +25,7 @@ const imageController = {
   mongoFetchImgBatch: async (batch_key) => {
     try{
       const imgBatch = await Images.find({batch_key})
-      imgBatch.map(img => {
+      let cards = imgBatch.map(img => {
         let cardData = img.genCardData()
         if(cardData){
           return cardData
@@ -35,11 +35,10 @@ const imageController = {
         err.location = 'imgBatch map'
         throw err
       })
-      if(imgBatch.length===3){
-        console.log(imgBatch)
+      if(cards.length===3){
         return imgBatch
       } else {
-        let error = new Error('Less than 3 objects to return')
+        let error = new Error('Less than 3 cards to return')
         throw error
       }
     } catch(err) {
