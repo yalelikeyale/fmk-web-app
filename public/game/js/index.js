@@ -115,7 +115,9 @@ $(document).ready(function(){
 			error: function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success: callback(res)
+			success: function(res){
+				callback(res)
+			}
 		}
 
 		$.get(payload)
@@ -145,7 +147,7 @@ $(document).ready(function(){
 		toggleDisplay('.m-choice');
 	}
 
-	function renderAnswers(img){
+	function renderAnswers(){
 		var answers = 
 			`<div class="row"> 
 				<div class="col-4">
