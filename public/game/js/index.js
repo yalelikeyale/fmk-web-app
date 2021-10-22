@@ -114,8 +114,7 @@ $(document).ready(function(){
 				return JSON.parse(res)
 			}
 		}
-		var cardBatch = $.get(payload)
-		return cardBatch
+		$.get(payload)
 	}
 
 	function shuffleCards(){
