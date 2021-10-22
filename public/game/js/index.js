@@ -220,7 +220,7 @@ $(document).ready(function(){
 	}
 
     function renderStart(){
-		var batchKeys = state.batches
+		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
 		var imgObjArray = fetchImgObjArray(randBatch);
 		var cards = imgObjArray.map(card => {
