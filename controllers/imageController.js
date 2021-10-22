@@ -36,7 +36,7 @@ const imageController = {
         throw err
       })
       if(cards.length===3){
-        return imgBatch
+        return cards
       } else {
         let error = new Error('Less than 3 cards to return')
         throw error
