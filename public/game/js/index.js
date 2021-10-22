@@ -165,15 +165,15 @@ $(document).ready(function(){
     	$('.fmk').toggleClass('col-6 col-12');
     	$('.play-button').on('click', function(){
     		toggleDisplay('.answer-wrapper');
-    		state.round = 0;
-    		state.correct = 0;
-    		state.incorrect = 0;
+    		GameState.round = 0;
+    		GameState.correct = 0;
+    		GameState.incorrect = 0;
     		tallyCorrect();
     		tallyIncorrect();
     		renderGamePlay();
     	});
-    	$('.title').html(`We agreed on ${state.correct} out of 5`)
-    	if(state.correct >= 3){
+    	$('.title').html(`We agreed on ${GameState.correct} out of 5`)
+    	if(GameState.correct >= 3){
 	  		var correctBackground = 
 				`<div class="col-12">
 					<div class="card">

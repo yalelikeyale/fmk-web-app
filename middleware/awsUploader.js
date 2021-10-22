@@ -20,6 +20,7 @@ const s3 = new aws.S3();
 const awsUpload = multer({
     storage: multerS3({
         s3,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
         acl: "public-read",
         bucket: AWS_BUCKET,
         metadata: function(req, file, cb) {

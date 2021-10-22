@@ -54,8 +54,8 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/register/index.html');
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login', successReturnToOrRedirect: '/'}),  function(req, res) {
-	console.log(req.user)
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login', successReturnToOrRedirect: '/game'}),  function(req, res) {
+  console.log(req.body)
 	res.redirect('/game');
 });
 
