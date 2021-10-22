@@ -105,7 +105,7 @@ $(document).ready(function(){
         }
 
 	function renderImgObjArray(imgBatchData){
-		GameState.imgObjArray.push(imgBatchData)
+		GameState.imgObjArray = imgBatchData;
 	}
 
 	function fetchImgObjArray(batch_key, callback){
