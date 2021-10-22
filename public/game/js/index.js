@@ -93,7 +93,7 @@ $(document).ready(function(){
 				<div class="card">
 					<div class="image-wrapper">
 					    // figure out how to reference aws s3 public objects from img src 
-						<img class="img" data-answer="${img.answer}" src="${awsBucket}${img.img_file}" alt="${img.alt}"/>
+						<img class="img" data-answer="${img.answer}" src="${GameState.awsBucket}${img.img_file}" alt="${img.alt}"/>
 					</div>
 					<div class="droppable answer-box">
 						<span class="description">${img.alt}</span>
