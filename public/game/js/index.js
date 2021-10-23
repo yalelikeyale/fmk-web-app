@@ -152,7 +152,7 @@ $(document).ready(function(){
 
 	function shuffleCards(){
 		var batch_key = GameState.batches[GameState.round];
-		fetchImgObjArray(randBatch, renderShuffleBatch)
+		fetchImgObjArray(batch_key, renderShuffleBatch)
 	}
 
 	function renderAnswers(){
