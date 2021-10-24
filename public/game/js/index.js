@@ -88,15 +88,11 @@ $(document).ready(function(){
     }
 
 	function renderCard(img){
-		console.log(img.alt)
-		console.log(img.answer)
-		console.log(img.img_file)
-		console.log(GameState.awsBucket)
+		console.log(`${GameState.awsBucket}${img.img_file}`)
 		var card = 
 			`<div class="col-4">
 				<div class="card">
 					<div class="image-wrapper">
-					    // figure out how to reference aws s3 public objects from img src 
 						<img class="img" data-answer="${img.answer}" src="${GameState.awsBucket}${img.img_file}" alt="${img.alt}"/>
 					</div>
 					<div class="droppable answer-box">
@@ -105,11 +101,11 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>`	
+		console.log(card)
         return card
         }
 
 	function renderRandomBatch(randBatchData){
-		console.log('in render random batch')
 		var cards = randBatchData.map(card => {
 			renderCard(card)
 		});
