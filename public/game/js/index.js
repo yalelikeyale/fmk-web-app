@@ -33,16 +33,25 @@ $(document).ready(function(){
 	}
 
 	function tallyCorrect(){
+		analytics.track('Correct Answers Submitted', {
+			'Total Correct':GameState.correct, 
+			'Total Incorrect':GameState.incorrect
+		})
 		$('.js-tally-correct').html(GameState.correct);
 	}
 
 	function tallyIncorrect(){
+		analytics.track('Incorrect Answers Submitted'{
+			'Total Correct':GameState.correct, 
+			'Total Incorrect':GameState.incorrect
+		})
 		$('.js-tally-incorrect').html(GameState.incorrect);
 	}
 
     function checkAnswers(){
     	GameState.correctCount = 0;
     	$('.line-up').find('.card').each(function(){
+			var imgName = $(this).find('.img').attr('alt');
     		var correct = $(this).find('.img').attr('data-answer');
     		correct = String(correct);
     		var userAnswer = $(this).find('.ui-droppable.answer-box.answered').text();
@@ -52,6 +61,10 @@ $(document).ready(function(){
     			GameState.nextQuestion = false;
     		} else {
 	    		if(correct.toLowerCase()===userAnswer.toLowerCase()){
+					analytics.track('Correct Answer Submitted'{
+						'Answer':userAnswer,
+						'Img Name': imgName
+					})
 	    			GameState.correctCount += 1;
 	    		}
     		}
