@@ -52,8 +52,7 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', 
-  passport.authenticate('local',{
-    successRedirect:'/game',
+  passport.authenticate('local', {
     failureRedirect: '/register',
     failureFlash: 'Incorrect Username or Password'
   })

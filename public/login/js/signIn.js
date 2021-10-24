@@ -14,7 +14,6 @@ $('#submit').on('click', function(e){
 			'Content-Type':'application/json'
 		},
 		dataType:'json',
-		async:false,
 		data:JSON.stringify(creds),
 		error:function(error){
 			console.log(error);
