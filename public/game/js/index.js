@@ -20,9 +20,8 @@ $(document).ready(function(){
 		'correct':0,
 		'incorrect':0,
 		'correctCount':0,
-		'nextQuestion':true, 
-		'imgObjArray':[]
-	}
+		'nextQuestion':true
+}
 
 	function toggleDisplay(selector){
 		$(selector).toggleClass('hide-it')

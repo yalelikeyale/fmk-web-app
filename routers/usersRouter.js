@@ -23,12 +23,10 @@ usersRouter.post('/', jsonParser, async (req, res, next) => {
         throw err
     }
     let userExists = await userController.checkExistingUsers(userObj.username)
-    console.log('made it past check if user exists')
     if(userExists>0){
       console.log('inside user exists if statement')
       throw new Error('User Already Exists')
     }
-    console.log('attempting to create new user')
     let userId = await userController.createNewUser(userObj)
     res.status(201).send(userId)
   } catch(error) {
