@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const session = require('express-session')
+const expressSession = require('express-session');
 const connectEnsureLogin = require('connect-ensure-login');
 
 mongoose.Promise = global.Promise;
@@ -17,36 +17,33 @@ const { usersRouter, imagesRouter} = require('./routers');
 
 const app = express();
 
-app.use(session({
-  secret: API_KEY,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-}));
-
 app.use(
   [
     morgan('common'),
-    bodyParser.urlencoded({ extended: false }),
     bodyParser.json(),
+    bodyParser.urlencoded({ extended: true }),
+    expressSession({
+      secret: API_KEY,
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+    }),
     passport.initialize(),
     passport.session(),
     express.static('public')
   ]
 )
 
-passport.use(Users.createStrategy());
+passport.use(Users.createStrategy())
+passport.serializeUser(Users.serializeUser())
+passport.deserializeUser(Users.deserializeUser())
 
-passport.serializeUser(Users.serializeUser());
-passport.deserializeUser(Users.deserializeUser());
 
 app.get('/', (req, res) => {
-  console.log(__dirname + '/')
   res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/register', (req, res) => {
-  console.log(__dirname + '/')
   res.sendFile(__dirname + '/register/index.html');
 });
 
@@ -54,13 +51,15 @@ app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/register/index.html');
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login', successReturnToOrRedirect: '/game'}),  function(req, res) {
-  console.log(req.body)
-	res.redirect('/game');
-});
+app.post('/login', 
+  passport.authenticate('local',{
+    successRedirect:'/game',
+    failureRedirect: '/login',
+    failureFlash: 'Incorrect Username or Password'
+  })
+);
 
-app.get('/game', connectEnsureLogin.ensureLoggedIn('/login'), (req, res) => {
-  console.log(__dirname + '/game/index.html')
+app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/game/index.html');
 });
 
@@ -70,7 +69,7 @@ app.use('/images',   imagesRouter);
 let server;
 function runServer(dbURI, port) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(dbURI, err => {
+    mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
       if (err) {
         return reject(err);
       }
