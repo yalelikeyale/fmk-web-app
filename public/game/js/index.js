@@ -238,7 +238,7 @@ $(document).ready(function(){
 
     function renderStart(){
 		var batchKeys = GameState.batches
-		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
+		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1)[0];
 		console.log(randBatch)
 		fetchImgObjArray(randBatch, renderRandomBatch)
 	}
