@@ -17,6 +17,10 @@ $('#submit').on('click', function(e){
 		data:JSON.stringify(creds),
 		error:function(error){
 			console.log(error);
+		},
+		success:function(data){
+			console.log(data)
+			window.location.href = data.redirect
 		}
 	}
 	$.post(payload)

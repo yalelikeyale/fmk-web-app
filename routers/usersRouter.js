@@ -24,7 +24,6 @@ usersRouter.post('/', jsonParser, async (req, res, next) => {
     }
     let userExists = await userController.checkExistingUsers(userObj.username)
     if(userExists>0){
-      console.log('inside user exists if statement')
       throw new Error('User Already Exists')
     }
     let userId = await userController.createNewUser(userObj)

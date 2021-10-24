@@ -45,7 +45,6 @@ $('#submit').on('click', function(e){
 			},
 			success:storeHeapIdentity 
 		}
-		console.log(payload)
 		$.post(payload)
 	}
 })
