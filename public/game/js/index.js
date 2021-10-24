@@ -105,10 +105,12 @@ $(document).ready(function(){
         }
 
 	function renderRandomBatch(randBatchData){
+		console.log('in render random batch')
 		var cards = randBatchData.map(card => {
 			renderCard(card)
 		});
 		cards = cards.join("");
+		console.log(cards)
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
 		toggleDisplay('.instructions');
@@ -237,6 +239,7 @@ $(document).ready(function(){
     function renderStart(){
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1);
+		console.log(randBatch)
 		fetchImgObjArray(randBatch, renderRandomBatch)
 	}
 
