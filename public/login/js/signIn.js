@@ -16,7 +16,7 @@ $('#submit').on('click', function(e){
 		dataType:'json',
 		data:JSON.stringify(creds),
 		error:function(error){
-			console.log('error ' + JSON.stringify(error));
+			console.log(error);
 		}
 	}
 	$.post(payload)
