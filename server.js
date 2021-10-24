@@ -53,13 +53,17 @@ app.get('/login', (req, res) => {
 
 app.post('/login', 
   passport.authenticate('local',{
-    successRedirect:'/game',
-    failureRedirect: '/login',
+    successRedirect:'/launch',
+    failureRedirect: '/register',
     failureFlash: 'Incorrect Username or Password'
   })
 );
 
 app.get('/game', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.sendFile(__dirname + '/game/index.html');
+});
+
+app.get('/launch', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/game/index.html');
 });
 
