@@ -252,7 +252,7 @@ $(document).ready(function(){
 		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
 		e.preventDefault();
 	});
-	if(storage.getItem('user_id')){
+	if(localStorage.getItem('user_id')){
 	  renderStart()
 	}
 });
