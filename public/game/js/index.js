@@ -88,6 +88,10 @@ $(document).ready(function(){
     }
 
 	function renderCard(img){
+		console.log(img.alt)
+		console.log(img.answer)
+		console.log(img.img_file)
+		console.log(GameState.awsBucket)
 		var card = 
 			`<div class="col-4">
 				<div class="card">
@@ -109,6 +113,7 @@ $(document).ready(function(){
 		var cards = randBatchData.map(card => {
 			renderCard(card)
 		});
+		console.log(cards)
 		cards = cards.join("");
 		console.log(cards)
 		$('.line-up').html(cards);
