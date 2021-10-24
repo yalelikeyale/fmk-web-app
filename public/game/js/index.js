@@ -105,7 +105,6 @@ $(document).ready(function(){
 		var cards = randBatchData.map(card => {
 			return renderCard(card)
 		});
-		console.log(cards)
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
@@ -117,7 +116,6 @@ $(document).ready(function(){
 		var cards = shuffleBatchData.map(img => {
 			return renderCard(img);
 		})
-		console.log(cards)
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		GameState.round += 1;
@@ -158,17 +156,17 @@ $(document).ready(function(){
 			`<div class="row"> 
 				<div class="col-4">
 					<div class="draggable">
-          				<span>F*ck</span>
+          				<span>Follow</span>
         			</div>
         		</div>
         		<div class="col-4">
         			<div class="draggable">
-          				<span>Marry</span>
+          				<span>Friend</span>
         			</div>
         		</div>
         		<div class="col-4">
         			<div class="draggable">
-          				<span>Kill</span>
+          				<span>Block</span>
         			</div>
         		</div>
         	</div>`	
