@@ -60,7 +60,7 @@ $(document).ready(function(){
     		if(GameState.correctCount===3){
 				GameState.correct += 1;
 				tallyCorrect()
-				if(GameState.round===3){
+				if(GameState.round===4){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -69,7 +69,7 @@ $(document).ready(function(){
     		} else {
 				GameState.incorrect += 1;
 				tallyIncorrect();
-				if(GameState.round===3){
+				if(GameState.round===4){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -87,6 +87,9 @@ $(document).ready(function(){
     }
 
 	function renderCard(img){
+		analytics.track('Img Rendered', {
+			'Img Name': img.alt
+		})
 		return `<div class="col-4">
 				  <div class="card">
 					<div class="image-wrapper">
@@ -107,7 +110,7 @@ $(document).ready(function(){
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
-		toggleDisplay('.instructions');
+		analytics.track('Random Batch Rendered')
 	}
 
 	function renderShuffleBatch(shuffleBatchData){
@@ -136,6 +139,7 @@ $(document).ready(function(){
 			url:`${location.origin}/images/${batch_key}`,
 			dataType:'json',
 			error: function(error){
+				analytics.track('Fetch Img Array Failed')
 				console.log('error ' + JSON.stringify(error));
 			},
 			success: function(res){
@@ -146,6 +150,8 @@ $(document).ready(function(){
 	}
 
 	function shuffleCards(){
+		analytics.page('Game Screen','Round Viewed')
+		analytics.track('Cards Shuffled')
 		var batch_key = GameState.batches[GameState.round];
 		fetchImgObjArray(batch_key, renderShuffleBatch)
 	}
@@ -176,6 +182,11 @@ $(document).ready(function(){
         }
 
     function renderEnd(){
+		analytics.page('Game Screen', 'End Game Viewed')
+		analytics.track('Game Completed', {
+			'Correct Count': GameState.correct,
+			'Incorrect Count': GameState.incorrect
+		})
     	var selectors = ['.correct.top','.correct.bottom','.incorrect','.answer-wrapper']
     	selectors.map((selector) => toggleDisplay(selector));
     	toggleButton('.submit-button', 'PLAY AGAIN', 'play-button');
@@ -232,12 +243,14 @@ $(document).ready(function(){
     function renderStart(){
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1)[0];
-
+		analytics.track('Random Batch Selected', {
+			'Batch Name': randBatch
+		})
 		fetchImgObjArray(randBatch, renderRandomBatch)
 	}
 
 	$('.play-button').on('click', function(){
-		toggleDisplay('.instructions');
+		analytics.track('Gameplay Started')
 		renderGamePlay();
 	})
 
@@ -252,7 +265,8 @@ $(document).ready(function(){
 		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
 		e.preventDefault();
 	});
-	if(localStorage.getItem('user_id')){
+	var userId = localStorage.getItem('user_id')
+	if(userId){
 	  renderStart()
 	}
 });

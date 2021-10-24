@@ -1,14 +1,16 @@
-
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-let authUser;
-let authPassword;
-
 function storeUserData(data){
+	analytics.track('User Created')
 	localStorage.setItem('user_id',data.obj_id)
 	// localStorage.setItem('user_email',data.email)
 	// localStorage.setItem('user_first',data.first_name)
 	// localStorage.setItem('user_last',data.last_name)
+	analytics.identify({
+		'First Name':data.first_name,
+		'Last Name':data.last_name,
+		'Email':data.email
+	})
 	window.location = '/game'
 }
 
@@ -39,6 +41,7 @@ $('#submit').on('click', function(e){
 			dataType:'json',
 			data:JSON.stringify(creds),
 			error:function(error){
+				analytics.track('User Creation Failed')
 				console.log('error ' + JSON.stringify(error));
 			},
 			success:storeUserData 
