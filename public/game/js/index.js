@@ -41,7 +41,7 @@ $(document).ready(function(){
 	}
 
 	function tallyIncorrect(){
-		analytics.track('Incorrect Answers Submitted'{
+		analytics.track('Incorrect Answers Submitted', {
 			'Total Correct':GameState.correct, 
 			'Total Incorrect':GameState.incorrect
 		})
@@ -61,7 +61,7 @@ $(document).ready(function(){
     			GameState.nextQuestion = false;
     		} else {
 	    		if(correct.toLowerCase()===userAnswer.toLowerCase()){
-					analytics.track('Correct Answer Submitted'{
+					analytics.track('Correct Answer Submitted',{
 						'Answer':userAnswer,
 						'Img Name': imgName
 					})
