@@ -1,3 +1,4 @@
+'use strict';
 const config = require('dotenv').config()
 const DB_PORT = process.env.PORT || 8080;
 const DB_URL = encodeURI(process.env.DB_URL);

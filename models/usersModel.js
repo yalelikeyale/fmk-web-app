@@ -15,7 +15,7 @@ const User = new Schema({
 
 User.methods.genHeapIdentity = function() {
   return {
-    heapIdentity: this._id
+    heapIdentity: this._id.str
   };
 };
 
