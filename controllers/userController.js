@@ -16,7 +16,7 @@ const userController = {
     try{
       const newUser = await Users.register({username, firstName, lastName, active:true}, password)
       if(newUser){
-        return newUser.genUsrObj
+        return newUser.genUsrObj()
       }
     } catch (err) {
       throw err
