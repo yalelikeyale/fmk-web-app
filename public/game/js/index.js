@@ -232,6 +232,7 @@ $(document).ready(function(){
     function renderStart(){
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1)[0];
+
 		fetchImgObjArray(randBatch, renderRandomBatch)
 	}
 
@@ -251,5 +252,7 @@ $(document).ready(function(){
 		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
 		e.preventDefault();
 	});
-	renderStart()
+	if(storage.getItem('user_id')){
+	  renderStart()
+	}
 });

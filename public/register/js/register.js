@@ -4,11 +4,12 @@ const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9
 let authUser;
 let authPassword;
 
-function storeHeapIdentity(data){
-	console.log(data)
-	// localStorage.setItem('heapIdentity',data.heapIdentity)
-	//redirect
-	// window.location = '/game'
+function storeUserData(data){
+	localStorage.setItem('user_id',data.obj_id)
+	// localStorage.setItem('user_email',data.email)
+	// localStorage.setItem('user_first',data.first_name)
+	// localStorage.setItem('user_last',data.last_name)
+	window.location = '/game'
 }
 
 $('#submit').on('click', function(e){
@@ -40,7 +41,7 @@ $('#submit').on('click', function(e){
 			error:function(error){
 				console.log('error ' + JSON.stringify(error));
 			},
-			success:storeHeapIdentity 
+			success:storeUserData 
 		}
 		$.post(payload)
 	}

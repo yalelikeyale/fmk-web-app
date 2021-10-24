@@ -54,7 +54,6 @@ app.get('/login', (req, res) => {
 
 app.post('/login', passport.authenticate('local', {failureRedirect: '/'}), 
   (req, res) => {
-    console.log(req.user)
     res.redirect('/game')
   }
 );
