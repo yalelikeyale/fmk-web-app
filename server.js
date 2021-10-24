@@ -25,7 +25,7 @@ app.use(
     expressSession({
       secret: API_KEY,
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
     }),
     passport.initialize(),
