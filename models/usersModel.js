@@ -13,9 +13,12 @@ const User = new Schema({
   active:{type: Boolean, default: false}
 });
 
-User.methods.genHeapIdentity = function() {
+User.methods.genUsrObj = function() {
   return {
-    heapIdentity: this._id.str
+    obj_id: this._id,
+    first_name: this.firstName,
+    last_name: this.lastName,
+    email: this.username
   };
 };
 

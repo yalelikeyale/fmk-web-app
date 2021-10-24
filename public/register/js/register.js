@@ -1,17 +1,14 @@
 
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
-
 let authUser;
 let authPassword;
 
 function storeHeapIdentity(data){
-	console.log('in store token')
-	console.log(data.heapIdentity)
-	localStorage.setItem('heapIdentity',data.heapIdentity)
+	console.log(data)
+	// localStorage.setItem('heapIdentity',data.heapIdentity)
 	//redirect
-	window.location = '/game'
+	// window.location = '/game'
 }
 
 $('#submit').on('click', function(e){

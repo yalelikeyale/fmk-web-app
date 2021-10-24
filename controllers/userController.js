@@ -14,11 +14,9 @@ const userController = {
     console.log('inside new create new user')
     let {username, firstName, lastName, password} = userObj
     try{
-      const usrCreated = await Users.register({username, firstName, lastName, active:true}, password)
-      if(usrCreated){
-        const heapId = usrCreated.genHeapIdentity()
-        console.log(heapId)
-        return usrCreated
+      const newUser = await Users.register({username, firstName, lastName, active:true}, password)
+      if(newUser){
+        return newUser.genUsrObj
       }
     } catch (err) {
       throw err
