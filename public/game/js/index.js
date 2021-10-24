@@ -88,10 +88,8 @@ $(document).ready(function(){
     }
 
 	function renderCard(img){
-		console.log(`${GameState.awsBucket}${img.img_file}`)
-		var card = 
-			`<div class="col-4">
-				<div class="card">
+		return `<div class="col-4">
+				  <div class="card">
 					<div class="image-wrapper">
 						<img class="img" data-answer="${img.answer}" src="${GameState.awsBucket}${img.img_file}" alt="${img.alt}"/>
 					</div>
@@ -99,19 +97,16 @@ $(document).ready(function(){
 						<span class="description">${img.alt}</span>
 						<p>Place your answer here!</p>
 					</div>
-				</div>
-			</div>`	
-		console.log(card)
-        return card
+				  </div>
+			    </div>`	
         }
 
 	function renderRandomBatch(randBatchData){
 		var cards = randBatchData.map(card => {
-			renderCard(card)
+			return renderCard(card)
 		});
 		console.log(cards)
 		cards = cards.join("");
-		console.log(cards)
 		$('.line-up').html(cards);
 		$('.answer-box').addClass('hide-it');
 		toggleDisplay('.instructions');
@@ -120,9 +115,9 @@ $(document).ready(function(){
 	function renderShuffleBatch(shuffleBatchData){
 		$('.title').html(GameState.category[GameState.round])
 		var cards = shuffleBatchData.map(img => {
-			var card = renderCard(img);
-			return card
+			return renderCard(img);
 		})
+		console.log(cards)
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		GameState.round += 1;
