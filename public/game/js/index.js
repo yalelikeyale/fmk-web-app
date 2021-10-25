@@ -206,13 +206,13 @@ $(document).ready(function(){
     		tallyIncorrect();
     		renderGamePlay();
     	});
-    	$('.title').html(`We agreed on ${GameState.correct} out of 5`)
+    	$('.title').html(`We agreed on ${GameState.correct} out of 4`)
     	if(GameState.correct >= 3){
 	  		var correctBackground = 
 				`<div class="col-12">
 					<div class="card">
 						<div class="image-wrapper">
-							<img class="answer-response" src="images/great_job.gif" alt="gif of a boy giving a thumbs up"/>
+							<img class="answer-response" src="https://media.giphy.com/media/O1QY4jjt2M9TErx4QW/giphy.gif" alt="gif of a boy giving a thumbs up"/>
 						</div>
 					</div>
 				</div>`	
@@ -222,7 +222,7 @@ $(document).ready(function(){
 				`<div class="col-12">
 					<div class="card">
 						<div class="image-wrapper">
-							<img class="answer-response" src="images/cannot_sit.gif" alt="gif of a girl not allowing you to sit with her"/>
+							<img class="answer-response" src="https://media.giphy.com/media/xT9KVuimKtly3zoJ0Y/giphy.gif" alt="gif of a girl not allowing you to sit with her"/>
 						</div>
 					</div>
 				</div>`	
@@ -251,11 +251,11 @@ $(document).ready(function(){
 
     function renderStart(){
 		GameState.startGame = true;
-		var batchKeys = GameState.batches
-		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1)[0];
+		var randBatch = GameState.batches.sort(() => .5 - Math.random()).slice(0,1)[0];
 		analytics.track('Random Batch Selected', {
 			'Batch Name': randBatch
 		})
+		console.log(randBatch)
 		fetchImgObjArray(randBatch, renderImgBatch)
 	}
 
@@ -264,17 +264,6 @@ $(document).ready(function(){
 		renderGamePlay();
 	})
 
-	$('[data-popup-open]').on('click', function(e)  {
-		var targeted_popup_class = $(this).attr('data-popup-open');
-		$('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
-		e.preventDefault();
-	});
-
-	$('[data-popup-close]').on('click', function(e)  {
-		var targeted_popup_class = jQuery(this).attr('data-popup-close');
-		$('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
-		e.preventDefault();
-	});
 	var userId = localStorage.getItem('user_id')
 	if(userId){
 	  renderStart()
