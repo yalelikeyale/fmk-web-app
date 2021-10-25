@@ -20,8 +20,7 @@ $(document).ready(function(){
 		'correct':0,
 		'incorrect':0,
 		'correctCount':0,
-		'nextQuestion':true,
-		'startGame':true
+		'nextQuestion':true
 }
 
 	function toggleDisplay(selector){
@@ -236,11 +235,7 @@ $(document).ready(function(){
 		GameState.startGame = false;
 		GameState.correct = 0;
 		GameState.incorrect = 0;
-		if(GameState.startGame)
-		$('.line-up').empty()
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
-		toggleDisplay('.instruct-title');
-		$('.popup .p2').remove();
 		shuffleCards();
 		renderAnswers();
 		var selectors = ['.correct.top','.correct.bottom','.incorrect','.line','.btn']
@@ -252,13 +247,11 @@ $(document).ready(function(){
 	}
 
     function renderStart(){
-		GameState.startGame = true;
 		var batchesCopy = GameState.batches.slice()
 		var randBatch = batchesCopy.sort(() => .5 - Math.random()).slice(0,1)[0];
 		analytics.track('Random Batch Selected', {
 			'Batch Name': randBatch
 		})
-		console.log(randBatch)
 		fetchImgObjArray(randBatch, renderImgBatch)
 	}
 
@@ -270,5 +263,7 @@ $(document).ready(function(){
 	var userId = localStorage.getItem('user_id')
 	if(userId){
 	  renderStart()
+	} else {
+		window.location('/')
 	}
 });
