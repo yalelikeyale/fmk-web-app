@@ -118,7 +118,6 @@ $(document).ready(function(){
         }
 
 	function renderImgBatch(imgBatchData){
-		$('.line-up').html(cards);
 		var cards = imgBatchData.map(card => {
 			return renderCard(card)
 		});
@@ -159,7 +158,6 @@ $(document).ready(function(){
 	}
 
 	function shuffleCards(){
-		$('.line-up').empty()
 		var batch = GameState.batches[GameState.round]
 		fetchImgObjArray(batch, renderImgBatch)
 	}
