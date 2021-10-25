@@ -8,7 +8,19 @@
                 next(payload)
             }
             analytics.addSourceMiddleware(mdwTest)
-            analytics.load("6ZOajBk8Yfb1C6RB8NCmHpuo4ZXMIPwA");
+            analytics.load("6ZOajBk8Yfb1C6RB8NCmHpuo4ZXMIPwA",{
+                integrations: {
+                  "Segment.io": {
+                    deliveryStrategy: {
+                    strategy: "batching",
+                    config: {
+                        size: 100,
+                        timeout: 5000
+                    }
+                  }
+                }
+              }
+            });
             analytics.page();
             }}();
           </script>
