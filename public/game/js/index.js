@@ -20,7 +20,8 @@ $(document).ready(function(){
 		'correct':0,
 		'incorrect':0,
 		'correctCount':0,
-		'nextQuestion':true
+		'nextQuestion':true,
+		'startGame':true
 }
 
 	function toggleDisplay(selector){
@@ -116,40 +117,34 @@ $(document).ready(function(){
 			    </div>`	
         }
 
-	function renderRandomBatch(randBatchData){
-		var cards = randBatchData.map(card => {
+	function renderImgBatch(imgBatchData){
+		var cards = imgBatchData.map(card => {
 			return renderCard(card)
 		});
 		cards = cards.join("");
 		$('.line-up').html(cards);
-		$('.answer-box').addClass('hide-it');
-		analytics.track('Random Batch Rendered')
+		if(GameState.startGame){
+			$('.answer-box').addClass('hide-it');
+		} else {
+			$('.title').html(GameState.category[GameState.round])
+			GameState.round += 1;
+			$( ".droppable" ).droppable({
+				accept:'.draggable',
+				drop: function( event, ui ) {
+					ui.draggable.detach().appendTo($(this));
+					const userChoice = $(ui.draggable).text();
+					$(this).text(userChoice);
+					$(this).css({'background-color':'#7FB800','line-height':'2.5'});
+					$(this).addClass('answered');
+				  }
+			});
+			toggleDisplay('.m-choice');
+		}
 	}
 
-	function renderShuffleBatch(shuffleBatchData){
-		$('.title').html(GameState.category[GameState.round])
-		var cards = shuffleBatchData.map(img => {
-			return renderCard(img);
-		})
-		cards = cards.join("");
-		$('.line-up').html(cards);
-		GameState.round += 1;
-		$( ".droppable" ).droppable({
-			accept:'.draggable',
-			drop: function( event, ui ) {
-				ui.draggable.detach().appendTo($(this));
-	    		const userChoice = $(ui.draggable).text();
-	    		$(this).text(userChoice);
-	    		$(this).css({'background-color':'#7FB800','line-height':'2.5'});
-	    		$(this).addClass('answered');
-	  		}
-		});
-		toggleDisplay('.m-choice');
-	}
-
-	function fetchImgObjArray(batch_key, callback){
+	function fetchImgObjArray(batchKey, callback){
 		const payload = {
-			url:`${location.origin}/images/${batch_key}`,
+			url:`${location.origin}/images/${batchKey}`,
 			dataType:'json',
 			error: function(error){
 				analytics.track('Fetch Img Array Failed')
@@ -163,10 +158,8 @@ $(document).ready(function(){
 	}
 
 	function shuffleCards(){
-		analytics.page('Game Screen','Round Viewed')
-		analytics.track('Cards Shuffled')
-		var batch_key = GameState.batches[GameState.round];
-		fetchImgObjArray(batch_key, renderShuffleBatch)
+		var batch = GameState.batches[GameState.round]
+		fetchImgObjArray(batch, renderImgBatch)
 	}
 
 	function renderAnswers(){
@@ -238,6 +231,8 @@ $(document).ready(function(){
     }
 
 	function renderGamePlay(){
+		GameState.round = 0;
+		GameState.startGame = false;
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
 		toggleDisplay('.instruct-title');
 		$('.popup .p2').remove();
@@ -254,12 +249,13 @@ $(document).ready(function(){
 	}
 
     function renderStart(){
+		GameState.startGame = true;
 		var batchKeys = GameState.batches
 		var randBatch = batchKeys.sort(() => .5 - Math.random()).slice(0,1)[0];
 		analytics.track('Random Batch Selected', {
 			'Batch Name': randBatch
 		})
-		fetchImgObjArray(randBatch, renderRandomBatch)
+		fetchImgObjArray(randBatch, renderImgBatch)
 	}
 
 	$('.play-button').on('click', function(){
