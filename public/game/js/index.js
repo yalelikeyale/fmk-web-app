@@ -235,6 +235,7 @@ $(document).ready(function(){
 	function renderGamePlay(){
 		GameState.round = 0;
 		GameState.startGame = false;
+		$('.line-up').empty()
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
 		toggleDisplay('.instruct-title');
 		$('.popup .p2').remove();
