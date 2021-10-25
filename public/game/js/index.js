@@ -121,7 +121,6 @@ $(document).ready(function(){
 		var cards = imgBatchData.map(card => {
 			return renderCard(card)
 		});
-		console.log(cards)
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		if(GameState.startGame){
@@ -160,6 +159,7 @@ $(document).ready(function(){
 
 	function shuffleCards(){
 		var batch = GameState.batches[GameState.round]
+		console.log(batch)
 		fetchImgObjArray(batch, renderImgBatch)
 	}
 
