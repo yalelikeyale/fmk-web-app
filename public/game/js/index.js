@@ -157,6 +157,7 @@ $(document).ready(function(){
 	}
 
 	function shuffleCards(){
+		$('.line-up').empty()
 		var batch = GameState.batches[GameState.round]
 		console.log(batch)
 		fetchImgObjArray(batch, renderImgBatch)
@@ -231,6 +232,7 @@ $(document).ready(function(){
     }
 
 	function renderGamePlay(){
+		$('.line-up').empty()
 		GameState.round = 0;
 		GameState.startGame = false;
 		GameState.correct = 0;
