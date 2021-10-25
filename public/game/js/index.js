@@ -253,7 +253,8 @@ $(document).ready(function(){
 
     function renderStart(){
 		GameState.startGame = true;
-		var randBatch = GameState.batches.sort(() => .5 - Math.random()).slice(0,1)[0];
+		var batchesCopy = GameState.batches.slice()
+		var randBatch = batchesCopy.sort(() => .5 - Math.random()).slice(0,1)[0];
 		analytics.track('Random Batch Selected', {
 			'Batch Name': randBatch
 		})
