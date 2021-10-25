@@ -213,7 +213,7 @@ $(document).ready(function(){
 				`<div class="col-12">
 					<div class="card">
 						<div class="image-wrapper">
-							<img class="answer-response" src="https://media.giphy.com/media/O1QY4jjt2M9TErx4QW/giphy.gif" alt="gif of a boy giving a thumbs up"/>
+							<img class="answer-response" src="https://media.giphy.com/media/m2Q7FEc0bEr4I/giphy.gif" alt="gif of a boy giving a thumbs up"/>
 						</div>
 					</div>
 				</div>`	
