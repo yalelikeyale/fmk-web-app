@@ -121,6 +121,7 @@ $(document).ready(function(){
 		var cards = imgBatchData.map(card => {
 			return renderCard(card)
 		});
+		console.log(cards)
 		cards = cards.join("");
 		$('.line-up').html(cards);
 		if(GameState.startGame){
@@ -233,6 +234,9 @@ $(document).ready(function(){
 	function renderGamePlay(){
 		GameState.round = 0;
 		GameState.startGame = false;
+		GameState.correct = 0;
+		GameState.incorrect = 0;
+		if(GameState.startGame)
 		$('.line-up').empty()
 		toggleButton('.play-button', 'SUBMIT', 'submit-button');
 		toggleDisplay('.instruct-title');
@@ -242,8 +246,6 @@ $(document).ready(function(){
 		var selectors = ['.correct.top','.correct.bottom','.incorrect','.line','.btn']
 		$('.start .col-12.fmk').toggleClass('col-6 col-12');
 		selectors.map((selector) => toggleDisplay(selector));
-		GameState.correct = 0;
-		GameState.incorrect = 0;
 		$('.submit-button').on('click', function(){
 			checkAnswers();
 		})
