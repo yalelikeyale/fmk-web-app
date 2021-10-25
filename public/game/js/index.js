@@ -118,6 +118,7 @@ $(document).ready(function(){
         }
 
 	function renderImgBatch(imgBatchData){
+		$('.line-up').html(cards);
 		var cards = imgBatchData.map(card => {
 			return renderCard(card)
 		});
