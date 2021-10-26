@@ -232,6 +232,7 @@ $(document).ready(function(){
     }
 
 	function renderGamePlay(){
+		toggleDisplay('.title')
 		$('.line-up').empty()
 		GameState.round = 0;
 		GameState.startGame = false;
@@ -249,6 +250,7 @@ $(document).ready(function(){
 	}
 
     function renderStart(){
+		toggleDisplay('.title')
 		var batchesCopy = GameState.batches.slice()
 		var randBatch = batchesCopy.sort(() => .5 - Math.random()).slice(0,1)[0];
 		analytics.track('Random Batch Selected', {
