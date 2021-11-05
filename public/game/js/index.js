@@ -9,13 +9,15 @@ $(document).ready(function(){
 		  'fast_food',
 		  'cartoon_dads',
 		  'french_fries',
-		  'trump'
+		  'trump',
+		  'disney'
 		],
 		'category':[
 		  'What could you eat for the rest of your life...',
 		  'Best Cartoon Dad...',
 		  'Choose your hangover fighter...',
-		  'Best Trump impression...'
+		  'Best Trump impression...', 
+		  'Lets get nastalgic...'
 		],
 		'correct':0,
 		'incorrect':0,
@@ -73,7 +75,7 @@ $(document).ready(function(){
     		if(GameState.correctCount===3){
 				GameState.correct += 1;
 				tallyCorrect()
-				if(GameState.round===4){
+				if(GameState.round === GameState.batches.length + 1){
 					renderEnd();
 				} else {
 					shuffleCards();
@@ -82,7 +84,7 @@ $(document).ready(function(){
     		} else {
 				GameState.incorrect += 1;
 				tallyIncorrect();
-				if(GameState.round===4){
+				if(GameState.round === GameState.batches.length + 1)){
 					renderEnd();
 				} else {
 					shuffleCards();
