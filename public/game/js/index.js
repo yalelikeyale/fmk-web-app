@@ -84,7 +84,7 @@ $(document).ready(function(){
     		} else {
 				GameState.incorrect += 1;
 				tallyIncorrect();
-				if(GameState.round === GameState.batches.length + 1)){
+				if(GameState.round === GameState.batches.length + 1){
 					renderEnd();
 				} else {
 					shuffleCards();
