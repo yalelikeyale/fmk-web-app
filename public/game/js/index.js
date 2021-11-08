@@ -1,8 +1,5 @@
 'use strict'
 
-const { use } = require("passport");
-
-// 
 $(document).ready(function(){
 	const GameState = {
 		'awsBucket':'https://fmk-web-app.s3.us-west-2.amazonaws.com/',
