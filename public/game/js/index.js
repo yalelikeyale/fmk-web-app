@@ -1,5 +1,7 @@
 'use strict'
 
+const { use } = require("passport");
+
 // 
 $(document).ready(function(){
 	const GameState = {
@@ -9,15 +11,13 @@ $(document).ready(function(){
 		  'fast_food',
 		  'cartoon_dads',
 		  'french_fries',
-		  'trump',
-		  'disney'
+		  'trump'
 		],
 		'category':[
 		  'What could you eat for the rest of your life...',
 		  'Best Cartoon Dad...',
 		  'Choose your hangover fighter...',
-		  'Best Trump impression...', 
-		  'Lets get nastalgic...'
+		  'Best Trump impression...'
 		],
 		'correct':0,
 		'incorrect':0,
@@ -92,7 +92,7 @@ $(document).ready(function(){
 				}
     		}
     	} else {
-    		alert('I know this game can leave you choosing between a turdsandwich and a douche, but you have to choose all three.')
+    		alert('Please make sure all three images have been friended, followed, or blocked!')
     		GameState.round -= 1;
     		GameState.correctCount = 0;
     		GameState.nextQuestion = true;
@@ -268,6 +268,7 @@ $(document).ready(function(){
 
 	var userId = localStorage.getItem('user_id')
 	if(userId){
+	  analytics.identify(userId)
 	  renderStart()
 	} else {
 		window.location('/')
