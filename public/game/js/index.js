@@ -265,7 +265,7 @@ $(document).ready(function(){
 
 	var userId = localStorage.getItem('user_id')
 	if(userId){
-	  analytics.identify(userId)
+	//   analytics.identify(userId)
 	  renderStart()
 	} else {
 		window.location('/')
